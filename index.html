@@ -59,11 +59,11 @@
         .characters-container { display: flex; justify-content: space-around; width: 100%; margin-top: 20px; }
         .chibi { font-size: 70px; position: relative; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3)); }
         
-        /* Widened chat bubble for longer dialogue */
+        /* Widened chat bubble for longer cute dialogue */
         .chat-bubble {
             background: white; color: #ff69b4; padding: 12px 18px;
-            border-radius: 20px; font-size: 15px; position: absolute;
-            top: -80px; left: -45px; width: 160px; opacity: 0;
+            border-radius: 20px; font-size: 14px; position: absolute;
+            top: -90px; left: -50px; width: 180px; opacity: 0;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-weight: bold; z-index: 10;
         }
 
@@ -127,7 +127,7 @@
                 <div class="chat-bubble" id="bubble2">...</div>
             </div>
         </div>
-        <button class="btn" id="btn-next-2" style="opacity: 0; margin-top: 130px;">Wait, I have a gift! 🎁</button>
+        <button class="btn" id="btn-next-2" style="opacity: 0; margin-top: 140px;">Wait, I have a gift! 🎁</button>
     </div>
 
     <div id="scene-3" class="scene">
@@ -201,7 +201,7 @@
            .to("#btn-next-1", {opacity: 1, y: -20, duration: 0.8}, "+=0.5");
     };
 
-    // Scene 1 -> 2 (The FUNNY Banter Chat)
+    // Scene 1 -> 2 (The EXTRA CUTE Banter Chat)
     document.getElementById('btn-next-1').addEventListener('click', () => {
         switchScene(1, 2);
         
@@ -209,14 +209,15 @@
         tl2.from("#char1", {x: -200, rotation: -20, opacity: 0, duration: 1, ease: "back.out(1.5)"})
            .from("#char2", {x: 200, rotation: 20, opacity: 0, duration: 1, ease: "back.out(1.5)"}, "-=0.8")
            
+           // The new, funnier dialogue!
            .to("#bubble1", {opacity: 1, y: -10, duration: 0.3})
-           .to("#bubble1", {text: "Oye Chotu! Where is my Eid call?! 😤📞", duration: 2})
+           .to("#bubble1", {text: "Oye Chotu! Eid er chaad uthe gelo, tor call koi?! 😤🌙", duration: 2.5})
            .to("#bubble2", {opacity: 1, y: -10, duration: 0.3}, "+=0.5")
-           .to("#bubble2", {text: "Hehe... I was busy eating biryani! 🍗😋", duration: 2})
-           .to("#bubble1", {text: "Biryani without me?! Betrayal! 😭", duration: 2}, "+=0.5")
-           // CHANGED TO YOUR INSIDE JOKE NICKNAME HERE
-           .to("#bubble2", {text: "Okay okay, Eid Mubarak Queen! 🙄💖", duration: 2.5}, "+=0.5")
-           .to("#bubble1", {text: "Doesn't count! Call me NOW! 📞😠", duration: 2.5}, "+=0.5")
+           .to("#bubble2", {text: "Uff, I was busy attacking the biryani! 🍗🤤", duration: 2.5})
+           .to("#bubble1", {text: "Eka eka biryani?! Tor pet e betha hobe bole dilam! 😡", duration: 2.5}, "+=0.5")
+           // APNAR DEYA NOTUN LINE TA EKHANE!
+           .to("#bubble2", {text: "Hawww bod-doa?! kaj hobe naa 😂... Eid Mubarak Buddy! 🙄💖", duration: 3.5}, "+=0.5")
+           .to("#bubble1", {text: "Eshob text e kaj hobena! Call kor taratari! 📞😤", duration: 2.5}, "+=0.5")
            .to("#btn-next-2", {opacity: 1, duration: 0.5});
     });
 
