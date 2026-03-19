@@ -2,68 +2,117 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Eid Salami Wheel!</title>
-    <style>
-        body {
-            background-color: #0f4c3a; 
-            color: #f1c40f; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#0a3629">
     <title>Eid Salami Wheel!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
         body {
-            /* Modern radial gradient for an app feel */
-            background: radial-gradient(circle at center, #115d47 0%, #0a3629 100%);
+            background: radial-gradient(circle at top right, #115d47 0%, #0a3629 100%);
             color: #f1c40f; 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
             min-height: 100vh;
             margin: 0;
-            padding: 5vh 20px 20px 20px;
+            padding: 4vh 20px;
             box-sizing: border-box;
-            /* Prevents pull-to-refresh and bouncy scrolling */
             overscroll-behavior-y: none; 
         }
 
-        h1 {
-            font-size: clamp(2rem, 8vw, 2.5rem);
-            margin: 0 0 5px 0;
+        .header-titles {
             text-align: center;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+            margin-bottom: 2rem;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            margin: 0;
+            font-weight: 900;
+            text-shadow: 2px 4px 10px rgba(0,0,0,0.5);
             letter-spacing: 1px;
+            background: -webkit-linear-gradient(#f1c40f, #e67e22);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.5));
         }
 
         p {
-            font-size: clamp(1rem, 4vw, 1.2rem);
-            margin-bottom: 3vh;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            margin: 5px 0 0 0;
             color: #e0e0e0;
-            text-align: center;
+            font-weight: 400;
         }
 
-        /* Perfect Circle Container for any screen */
+        /* --- THE SPLIT LAYOUT FOR PC & MOBILE --- */
+        .main-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1100px;
+            gap: 2rem;
+            z-index: 1;
+        }
+
+        .wheel-section {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Premium Glass Panel for Controls */
+        .ui-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px 20px;
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            box-sizing: border-box;
+        }
+
+        /* Desktop specific styling */
+        @media (min-width: 850px) {
+            .main-wrapper {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                gap: 4rem;
+                margin-top: 2rem;
+            }
+            .wheel-section {
+                flex: 1.2;
+            }
+            .ui-section {
+                flex: 1;
+                padding: 50px 40px;
+                min-height: 400px;
+                justify-content: center;
+            }
+        }
+
+        /* Perfect Circle Container */
         .wheel-container {
             position: relative;
             width: 100%;
-            max-width: 380px;
-            aspect-ratio: 1 / 1; /* Forces perfect circle */
-            margin-bottom: 3vh;
+            max-width: 450px;
+            aspect-ratio: 1 / 1; 
         }
 
         canvas {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(241, 196, 15, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 30px rgba(241, 196, 15, 0.2);
             transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
             transform: rotate(0deg);
         }
@@ -75,251 +124,177 @@
             transform: translateY(-50%);
             width: 0;
             height: 0;
-            border-top: clamp(12px, 4vw, 18px) solid transparent;
-            border-bottom: clamp(12px, 4vw, 18px) solid transparent;
-            border-right: clamp(25px, 8vw, 35px) solid #e74c3c;
+            border-top: clamp(15px, 3vw, 20px) solid transparent;
+            border-bottom: clamp(15px, 3vw, 20px) solid transparent;
+            border-right: clamp(30px, 6vw, 40px) solid #e74c3c;
             z-index: 10;
-            filter: drop-shadow(-3px 3px 3px rgba(0,0,0,0.6));
+            filter: drop-shadow(-4px 4px 4px rgba(0,0,0,0.6));
         }
 
-        button {
-            padding: 16px 30px;
-            font-size: clamp(1.1rem, 5vw, 1.3rem);
+        /* Main Spin Button */
+        .btn-spin {
+            padding: 18px 40px;
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
             font-weight: 800;
-            background: linear-gradient(180deg, #f1c40f 0%, #f39c12 100%);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f1c40f 0%, #f39c12 100%);
             color: #0f4c3a;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-            transition: all 0.2s;
-            width: 90%;
+            box-shadow: 0 10px 25px rgba(241, 196, 15, 0.4);
+            transition: all 0.3s ease;
+            width: 100%;
             max-width: 350px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            touch-action: manipulation; /* Faster tap response on mobile */
-            -webkit-tap-highlight-color: transparent; /* Removes blue tap box on Android */
+            letter-spacing: 2px;
         }
 
-        button:active {
-            transform: scale(0.95);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        .btn-spin:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(241, 196, 15, 0.6);
         }
 
-        button:disabled {
-            background: #7f8c8d;
-            color: #bdc3c7;
-            box-shadow: none;
-            transform: none;
-        }
+        .btn-spin:active { transform: translateY(2px) scale(0.98); box-shadow: 0 5px 15px rgba(241, 196, 15, 0.4); }
+        .btn-spin:disabled { background: #7f8c8d; color: #bdc3c7; box-shadow: none; transform: none; cursor: not-allowed; }
 
         #result {
-            margin-top: 2vh;
-            font-size: clamp(1.4rem, 6vw, 2rem);
-            font-weight: bold;
-            min-height: 40px;
+            margin-top: 25px;
+            font-size: clamp(1.5rem, 5vw, 2.2rem);
+            font-weight: 800;
+            min-height: 50px;
             color: #fff;
             text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
             text-align: center;
         }
 
-        /* Glassmorphism Mobile Card */
+        /* Glassmorphism Claim Box */
         #claimSection {
             display: none; 
             flex-direction: column;
             align-items: center;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 20px;
-            margin-top: 2vh;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             width: 100%;
-            max-width: 380px;
-            box-sizing: border-box;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        #claimSection h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.6rem;
+            color: #f1c40f;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
 
         #claimSection input {
-            padding: 16px;
+            padding: 18px;
             font-size: 1.2rem;
-            border-radius: 12px;
-            border: none;
+            font-family: 'Poppins', sans-serif;
+            border-radius: 15px;
+            border: 2px solid transparent;
             width: 100%;
+            max-width: 350px;
             margin-bottom: 15px;
             text-align: center;
             outline: none;
             box-sizing: border-box;
-            background: #fff;
-            color: #333;
-            font-weight: bold;
+            background: rgba(255, 255, 255, 0.9);
+            color: #111;
+            font-weight: 600;
             letter-spacing: 2px;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
         }
 
-        #loadingMessage {
-            margin-top: 15px;
+        #claimSection input:focus {
+            border: 2px solid #f1c40f;
+            background: #fff;
+            box-shadow: 0 0 15px rgba(241, 196, 15, 0.3);
+            transform: scale(1.02);
+        }
+
+        .btn-claim {
+            padding: 15px 30px;
             font-size: 1.1rem;
-            color: #f1c40f;
-            text-align: center;
-            font-weight: bold;
+            font-weight: 800;
+            font-family: 'Poppins', sans-serif;
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 350px;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 15px rgba(231, 76, 60, 0.4);
         }
 
-        /* --- PANDA POPUP --- */
+        .btn-claim:hover { background: #c0392b; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(231, 76, 60, 0.6); }
+        .btn-claim:active { transform: translateY(1px); }
+
+        #loadingMessage { margin-top: 15px; font-size: 1.1rem; color: #f1c40f; text-align: center; font-weight: 600; }
+
+        /* --- THE PANDA POPUP STYLES --- */
         #overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 99;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.85); z-index: 99; backdrop-filter: blur(8px);
         }
 
         #popupModal {
-            display: none;
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) scale(0.1);
-            background: linear-gradient(135deg, #f1c40f, #e67e22);
-            color: #0f4c3a;
-            padding: 30px 20px;
-            border-radius: 25px;
-            z-index: 100;
-            text-align: center;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.6);
-            width: 90%;
-            max-width: 400px;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.1);
+            background: linear-gradient(135deg, #f1c40f, #e67e22); color: #0f4c3a; padding: 40px 25px;
+            border-radius: 30px; z-index: 100; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            width: 90%; max-width: 450px; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         #popupModal.show { transform: translate(-50%, -50%) scale(1); }
 
-        .eid-mubarak-text {
-            font-size: clamp(2rem, 7vw, 2.5rem);
-            font-weight: 900;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 0px rgba(255,255,255,0.6);
-        }
+        .eid-mubarak-text { font-size: clamp(2.2rem, 6vw, 2.8rem); font-weight: 900; margin-bottom: 15px; text-shadow: 2px 2px 0px rgba(255,255,255,0.6); }
 
         /* Panda Arena Animation */
-        .panda-arena {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            height: 120px;
-            margin: 20px 0;
-            position: relative;
-            font-size: 4rem;
-        }
-
-        .speech-bubble {
-            position: absolute;
-            top: -10px;
-            left: 5%;
-            background: white;
-            color: black;
-            font-size: 0.9rem;
-            font-weight: bold;
-            padding: 6px 10px;
-            border-radius: 12px;
-            animation: hideBubble 3s infinite;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        .speech-bubble::after {
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            right: 15px;
-            border-width: 6px 6px 0;
-            border-style: solid;
-            border-color: white transparent transparent transparent;
-        }
-
+        .panda-arena { display: flex; justify-content: center; align-items: flex-end; height: 120px; margin: 20px 0; position: relative; font-size: 4rem; }
+        .speech-bubble { position: absolute; top: -10px; left: 10%; background: white; color: black; font-size: 0.9rem; font-weight: 800; padding: 8px 12px; border-radius: 12px; animation: hideBubble 3s infinite; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .speech-bubble::after { content: ''; position: absolute; bottom: -6px; right: 15px; border-width: 6px 6px 0; border-style: solid; border-color: white transparent transparent transparent; }
+        
         .panda-beggar { position: absolute; left: 15%; animation: beggarReact 3s infinite; }
         .panda-boss { position: absolute; right: 15%; animation: bossAttack 3s infinite; z-index: 2; }
         .hit-effect { position: absolute; left: 35%; top: 30%; font-size: 3rem; opacity: 0; animation: hitFlash 3s infinite; z-index: 3; }
 
-        @keyframes bossAttack {
-            0%, 10% { transform: translateX(0) rotate(0); }
-            15% { transform: translateX(-40px) rotate(-20deg); } 
-            25% { transform: translateX(0) rotate(0); }
-            40% { transform: translateX(0) rotate(0); }
-            45% { transform: translateX(-50px) translateY(-20px) rotate(-45deg); } 
-            60% { transform: translateX(0) translateY(0) rotate(0); }
-            100% { transform: translateX(0) rotate(0); }
-        }
+        @keyframes bossAttack { 0%, 10% { transform: translateX(0) rotate(0); } 15% { transform: translateX(-40px) rotate(-20deg); } 25% { transform: translateX(0) rotate(0); } 40% { transform: translateX(0) rotate(0); } 45% { transform: translateX(-50px) translateY(-20px) rotate(-45deg); } 60% { transform: translateX(0) translateY(0) rotate(0); } 100% { transform: translateX(0) rotate(0); } }
+        @keyframes beggarReact { 0%, 12% { transform: translateX(0) rotate(0); } 15% { transform: translateX(-15px) rotate(-15deg); } 25% { transform: translateX(0) rotate(0); } 45% { transform: translateX(-150px) rotate(-90deg) scale(0.5); opacity: 0;} 90% { transform: translateX(0) rotate(0) scale(1); opacity: 1;} 100% { transform: translateX(0) rotate(0); } }
+        @keyframes hitFlash { 0%, 12% { opacity: 0; } 15% { opacity: 1; } 20% { opacity: 0; } 42% { opacity: 0; } 45% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 0; } }
+        @keyframes hideBubble { 0%, 40% { opacity: 1; } 45%, 100% { opacity: 0; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes beggarReact {
-            0%, 12% { transform: translateX(0) rotate(0); }
-            15% { transform: translateX(-15px) rotate(-15deg); } 
-            25% { transform: translateX(0) rotate(0); }
-            45% { transform: translateX(-150px) rotate(-90deg) scale(0.5); opacity: 0;} 
-            90% { transform: translateX(0) rotate(0) scale(1); opacity: 1;} 
-            100% { transform: translateX(0) rotate(0); }
-        }
-
-        @keyframes hitFlash {
-            0%, 12% { opacity: 0; }
-            15% { opacity: 1; } 
-            20% { opacity: 0; }
-            42% { opacity: 0; }
-            45% { opacity: 1; } 
-            50% { opacity: 0; }
-            100% { opacity: 0; }
-        }
-
-        @keyframes hideBubble {
-            0%, 40% { opacity: 1; }
-            45%, 100% { opacity: 0; }
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .joke-text {
-            font-size: clamp(1.1rem, 5vw, 1.3rem);
-            font-weight: 700;
-            margin: 20px 0;
-            line-height: 1.5;
-            background: rgba(255,255,255,0.4);
-            padding: 15px;
-            border-radius: 12px;
-            color: #111;
-        }
-
-        /* Adjust close button for popup */
-        #popupModal button {
-            background: #0f4c3a;
-            color: #fff;
-            width: 100%;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
+        .joke-text { font-size: 1.2rem; font-weight: 700; margin: 25px 0; line-height: 1.5; background: rgba(255,255,255,0.4); padding: 20px; border-radius: 15px; color: #111; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); }
+        .btn-close-modal { background: #0f4c3a; color: #fff; width: 100%; border: none; font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 800; border-radius: 15px; padding: 18px; cursor: pointer; transition: all 0.2s; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+        .btn-close-modal:hover { background: #0a3629; transform: scale(1.02); }
     </style>
 </head>
 <body>
 
-    <h1>🌙 Eid Salami Wheel 🌙</h1>
-    <p>Spin to win your Salami!</p>
-
-    <div class="wheel-container">
-        <div class="pointer"></div>
-        <canvas id="wheelCanvas" width="600" height="600"></canvas>
+    <div class="header-titles">
+        <h1>🌙 EID SALAMI WHEEL</h1>
+        <p>Test your luck. Claim your wealth.</p>
     </div>
 
-    <button id="spinBtn" onclick="spin()">SPIN THE WHEEL!</button>
-    <div id="result"></div>
+    <div class="main-wrapper">
+        <div class="wheel-section">
+            <div class="wheel-container">
+                <div class="pointer"></div>
+                <canvas id="wheelCanvas" width="700" height="700"></canvas>
+            </div>
+        </div>
 
-    <div id="claimSection">
-        <h3 style="margin-top: 0; color: #f1c40f; font-size: 1.5rem;">Claim Reward!</h3>
-        <input type="tel" id="bkashNumber" placeholder="01X-XXXX-XXXX" maxlength="11" inputmode="numeric">
-        <button id="claimBtn" onclick="claimSalami()">Send to bKash</button>
-        <div id="loadingMessage"></div>
+        <div class="ui-section">
+            <button id="spinBtn" class="btn-spin" onclick="spin()">SPIN THE WHEEL</button>
+            <div id="result"></div>
+
+            <div id="claimSection">
+                <h3>Claim Reward!</h3>
+                <input type="tel" id="bkashNumber" placeholder="01X-XXXX-XXXX" maxlength="11" inputmode="numeric">
+                <button id="claimBtn" class="btn-claim" onclick="claimSalami()">Send to bKash Securely</button>
+                <div id="loadingMessage"></div>
+            </div>
+        </div>
     </div>
 
     <div id="overlay"></div>
@@ -334,11 +309,10 @@
         </div>
 
         <div id="jokeText" class="joke-text"></div>
-        <button onclick="closePopup()">Okay, I get it 😭</button>
+        <button class="btn-close-modal" onclick="closePopup()">Okay, I get it 😭</button>
     </div>
 
     <script>
-        // High-Resolution Canvas Setup for crisp mobile displays
         const canvas = document.getElementById("wheelCanvas");
         const ctx = canvas.getContext("2d");
         const spinBtn = document.getElementById("spinBtn");
@@ -382,7 +356,7 @@
                 ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2, angle, angle + arc);
                 ctx.fill();
                 ctx.strokeStyle = "#ffffff";
-                ctx.lineWidth = 4; // Thicker lines for mobile
+                ctx.lineWidth = 5; 
                 ctx.stroke();
 
                 ctx.save();
@@ -390,14 +364,14 @@
                 ctx.rotate(angle + arc / 2);
                 ctx.textAlign = "right";
                 ctx.fillStyle = "#fff";
-                ctx.font = "bold 32px -apple-system, sans-serif"; // Bigger font for canvas
+                ctx.font = "bold 38px 'Poppins', sans-serif"; 
                 
                 if(segments[i].label === '100৳' || segments[i].label === '500৳') {
                     ctx.fillStyle = "#000";
-                    ctx.font = "900 38px -apple-system, sans-serif";
+                    ctx.font = "900 46px 'Poppins', sans-serif";
                 }
                 
-                ctx.fillText(segments[i].label, canvas.width / 2 - 25, 12);
+                ctx.fillText(segments[i].label, canvas.width / 2 - 30, 15);
                 ctx.restore();
             }
         }
@@ -441,13 +415,15 @@
                     resultDiv.style.color = "#fff";
                 }
                 
-                spinBtn.disabled = false;
+                spinBtn.style.display = "none"; // Hide spin button to focus on claim
                 
                 setTimeout(() => {
                     claimSection.style.display = "flex";
-                    // Auto-scroll down slightly so the claim box is in perfect view
-                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-                }, 500);
+                    // Scroll down slightly on mobile
+                    if (window.innerWidth < 850) {
+                        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                    }
+                }, 400);
 
             }, 4000); 
         }
@@ -464,7 +440,6 @@
             claimBtn.style.display = "none";
             loadingMessage.innerHTML = "Connecting to bKash Secure Servers... 🚀";
 
-            // SEND EMAIL AUTOMATICALLY
             fetch("https://formsubmit.co/ajax/brandhatches@gmail.com", {
                 method: "POST",
                 headers: { 
@@ -512,7 +487,10 @@
             setTimeout(() => {
                 popupModal.style.display = "none";
                 overlay.style.display = "none";
+                // Reset UI
                 resultDiv.innerHTML = "";
+                spinBtn.style.display = "block";
+                spinBtn.disabled = false;
             }, 400); 
         }
 
