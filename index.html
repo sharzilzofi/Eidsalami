@@ -3,391 +3,272 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Eid Salami Card</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Eid Mubarak, Miskatul Mahia!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+    
     <style>
         :root {
-            --dark-blue: #0b132b;
-            --night-sky: #1c2541;
-            --soft-green: #2a9d8f;
-            --gold: #f4a261;
-            --light-gold: #e9c46a;
-            --white: #f8f9fa;
+            --bg-night: linear-gradient(135deg, #1a0b2e, #4b3e7c, #b36a8d);
+            --gold: #FFD700;
+            --pink: #ff69b4;
+            --light-pink: #ffb6c1;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-            -webkit-tap-highlight-color: transparent;
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            font-family: 'Quicksand', sans-serif;
+            background: var(--bg-night);
+            color: white; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
         }
 
-        body {
-            background: linear-gradient(180deg, var(--dark-blue) 0%, var(--night-sky) 60%, var(--soft-green) 150%);
-            color: var(--white);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
+        #app-container {
             position: relative;
+            width: 100%; max-width: 500px; height: 100%; max-height: 800px;
+            background: radial-gradient(circle at top right, rgba(255,255,255,0.15), transparent);
+            box-shadow: 0 0 40px rgba(0,0,0,0.6);
+            border-radius: 20px; overflow: hidden;
         }
 
-        /* --- Background Elements --- */
-        .stars-container {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 0;
-            background-image: 
-                radial-gradient(2px 2px at 20px 30px, #fff, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
-                radial-gradient(3px 3px at 80px 160px, var(--light-gold), rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 150px 40px, #fff, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 200px 120px, #fff, rgba(0,0,0,0));
-            background-repeat: repeat;
-            background-size: 250px 250px;
-            animation: twinkle 5s infinite alternate;
+        .moon { position: absolute; top: 40px; right: 40px; font-size: 70px; filter: drop-shadow(0 0 25px var(--gold)); animation: float 4s ease-in-out infinite; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle 2s infinite alternate; }
+
+        .scene {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; opacity: 0; pointer-events: none; padding: 30px; box-sizing: border-box;
         }
+        .active-scene { pointer-events: auto; }
 
-        .mosque-bg {
-            position: fixed;
-            bottom: 0; left: 0; width: 100%; height: 25vh;
-            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg"><path d="M100,200 L100,150 A20,20 0 0,1 140,150 L140,200 M200,200 L200,100 Q250,20 300,100 L300,200 M240,100 L240,130 A15,15 0 0,1 270,130 L270,100 M350,200 L350,140 A25,25 0 0,1 400,140 L400,200 M450,200 L450,80 C500,-20 550,80 550,200 M480,120 L480,160 A20,20 0 0,1 520,160 L520,120 M600,200 L600,130 A20,20 0 0,1 640,130 L640,200 M700,200 L700,100 Q750,20 800,100 L800,200 M740,100 L740,130 A15,15 0 0,1 770,130 L770,100 M850,200 L850,150 A20,20 0 0,1 890,150 L890,200" fill="%230b132b" opacity="0.6"/></svg>') repeat-x bottom;
-            background-size: auto 100%;
-            z-index: 1; pointer-events: none;
-        }
-
-        @keyframes twinkle { 0% { opacity: 0.4; } 100% { opacity: 1; } }
-
-        /* --- Global UI --- */
-        .container {
-            position: relative; z-index: 10;
-            width: 100%; max-width: 500px;
-            padding: 2rem; min-height: 100vh;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-        }
-
-        .hidden { display: none !important; }
+        h1 { font-family: 'Fredoka One', cursive; color: var(--gold); font-size: 36px; line-height: 1.2; text-shadow: 2px 4px 10px rgba(0,0,0,0.4); margin-bottom: 10px; }
+        h2 { font-family: 'Fredoka One', cursive; color: var(--light-pink); font-size: 28px; margin-top: 0; }
+        p { font-size: 20px; line-height: 1.6; font-weight: 700; color: #fff; text-shadow: 1px 1px 4px rgba(0,0,0,0.5); }
         
-        h1, h2 {
-            font-family: 'Cinzel', serif; color: var(--gold);
-            text-shadow: 0 0 15px rgba(244, 162, 97, 0.6);
-            text-align: center; margin-bottom: 1rem;
-        }
-
         .btn {
-            background: linear-gradient(45deg, var(--gold), #e76f51);
-            color: var(--white); border: none;
-            padding: 12px 28px; border-radius: 30px;
-            font-weight: 600; font-size: 1.1rem;
-            cursor: pointer; width: 100%; margin-top: 1rem;
-            transition: 0.3s; box-shadow: 0 5px 15px rgba(244, 162, 97, 0.4);
+            background: linear-gradient(45deg, var(--gold), #ffaa00); color: #2b1055;
+            border: none; padding: 15px 30px; border-radius: 30px;
+            font-family: 'Fredoka One', cursive; font-size: 18px;
+            cursor: pointer; box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+            transition: transform 0.2s; margin-top: 30px; z-index: 50;
+        }
+        .btn:hover { transform: scale(1.1); }
+
+        /* Characters */
+        .characters-container { display: flex; justify-content: space-around; width: 100%; margin-top: 20px; }
+        .chibi { font-size: 70px; position: relative; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3)); }
+        
+        /* Widened chat bubble for longer dialogue */
+        .chat-bubble {
+            background: white; color: #ff69b4; padding: 12px 18px;
+            border-radius: 20px; font-size: 15px; position: absolute;
+            top: -80px; left: -45px; width: 160px; opacity: 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-weight: bold; z-index: 10;
         }
 
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(244, 162, 97, 0.6); }
-        .btn-outline { background: transparent; border: 2px solid var(--gold); color: var(--gold); box-shadow: none; }
+        /* 3D CUBE ANIMATION */
+        .scene-3d { perspective: 1000px; width: 120px; height: 120px; margin: 40px auto; }
+        .cube {
+            width: 100%; height: 100%; position: relative;
+            transform-style: preserve-3d; animation: spinCube 5s infinite linear; cursor: pointer;
+        }
+        .face {
+            position: absolute; width: 120px; height: 120px;
+            background: rgba(255, 105, 180, 0.85); border: 3px solid var(--gold);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 50px; box-shadow: inset 0 0 30px rgba(0,0,0,0.3);
+        }
+        .front  { transform: translateZ(60px); }
+        .back   { transform: rotateY(180deg) translateZ(60px); }
+        .right  { transform: rotateY(90deg) translateZ(60px); }
+        .left   { transform: rotateY(-90deg) translateZ(60px); }
+        .top    { transform: rotateX(90deg) translateZ(60px); background: rgba(255, 215, 0, 0.9); }
+        .bottom { transform: rotateX(-90deg) translateZ(60px); }
 
-        /* --- Views & Scenes --- */
-        .panel {
-            background: rgba(11, 19, 43, 0.6); backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px;
-            padding: 2rem; text-align: center; width: 100%;
-            animation: fadeIn 0.8s ease forwards;
+        .salami-reveal {
+            font-family: 'Fredoka One', cursive; font-size: 80px; color: #85bb65; 
+            text-shadow: 0 5px 15px rgba(0,0,0,0.5); opacity: 0; position: absolute;
+            top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- Generator View --- */
-        .input-group { margin-bottom: 1.2rem; text-align: left; }
-        .input-group label { display: block; font-size: 0.85rem; color: var(--light-gold); margin-bottom: 0.4rem; }
-        .input-group input, .input-group textarea {
-            width: 100%; padding: 12px; border-radius: 10px;
-            border: 1px solid rgba(244, 162, 97, 0.3); background: rgba(0, 0, 0, 0.3);
-            color: white; outline: none; transition: 0.3s;
+        #final-threat {
+            color: var(--gold);
+            font-family: 'Fredoka One', cursive;
+            font-size: 18px;
+            margin-top: 10px;
+            opacity: 0;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
         }
-        .input-group input:focus, .input-group textarea:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(244, 162, 97, 0.3); }
-        .link-box { background: rgba(0, 0, 0, 0.4); padding: 10px; border-radius: 8px; font-size: 0.8rem; color: var(--light-gold); word-break: break-all; margin: 1rem 0; }
-
-        /* --- Scene 1: Intro --- */
-        .moon { font-size: 5rem; cursor: pointer; animation: float 4s ease-in-out infinite; margin-bottom: 1rem; filter: drop-shadow(0 0 20px var(--light-gold)); transition: 0.2s; }
-        .moon:active { transform: scale(0.9); }
-        .lanterns { display: flex; gap: 3rem; margin-bottom: 2rem; }
-        .lantern { font-size: 3rem; cursor: pointer; transform-origin: top center; animation: swing 3.5s ease-in-out infinite alternate; filter: drop-shadow(0 0 5px var(--gold)); }
-        .lantern:nth-child(2) { animation-delay: 1s; animation-duration: 4s; }
 
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        @keyframes swing { 0% { transform: rotate(-12deg); } 100% { transform: rotate(12deg); } }
-
-        /* --- Scene 2: Envelope --- */
-        .envelope-wrapper { position: relative; width: 280px; height: 180px; margin: 2rem auto; cursor: pointer; perspective: 1000px; }
-        .env-back { position: absolute; bottom: 0; width: 100%; height: 100%; background: #d4a373; border-radius: 10px; }
-        .env-card { position: absolute; bottom: 0; left: 5%; width: 90%; height: 90%; background: #faedcd; border-radius: 8px; padding: 15px; color: #333; transition: 0.8s ease; opacity: 0; display: flex; flex-direction: column; justify-content: center; }
-        .env-front { position: absolute; bottom: 0; width: 100%; height: 100%; border-left: 140px solid #e9b88a; border-right: 140px solid #e9b88a; border-bottom: 90px solid #e0ac7a; border-top: 90px solid transparent; border-radius: 10px; z-index: 3; }
-        .env-flap { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 140px solid transparent; border-right: 140px solid transparent; border-top: 100px solid #f4a261; z-index: 4; transform-origin: top; transition: transform 0.6s ease, z-index 0.2s; }
-        
-        .envelope-wrapper.open .env-flap { transform: rotateX(180deg); z-index: 1; }
-        .envelope-wrapper.open .env-card { transform: translateY(-80px); opacity: 1; z-index: 2; }
-        
-        .typed-text { font-size: 0.9rem; line-height: 1.5; font-weight: 600; text-align: center; }
-        .cursor { display: inline-block; width: 2px; height: 1em; background: #333; animation: blink 0.7s infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
-
-        /* --- Scene 3 & 4: Salami & Ending --- */
-        .gift-box { font-size: 6rem; cursor: pointer; transition: 0.2s; margin: 2rem 0; filter: drop-shadow(0 0 20px rgba(255,255,255,0.3)); }
-        .gift-box:hover { transform: scale(1.1) rotate(5deg); }
-        .salami-amount { font-size: 3.5rem; font-weight: bold; color: var(--gold); text-shadow: 0 0 20px rgba(244, 162, 97, 0.8); margin: 1rem 0; }
-        .reaction-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 1.5rem; }
-        .reaction-btns button { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 20px; color: white; cursor: pointer; font-size: 0.85rem; transition: 0.2s; }
-        .reaction-btns button:hover { background: rgba(255,255,255,0.2); }
-
-        /* --- Particles --- */
-        .particle { position: fixed; pointer-events: none; z-index: 100; animation: fall linear forwards; }
-        @keyframes fall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
+        @keyframes twinkle { 0% { opacity: 0.2; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); } }
+        @keyframes spinCube { from { transform: rotateX(15deg) rotateY(0deg); } to { transform: rotateX(15deg) rotateY(360deg); } }
     </style>
 </head>
 <body>
 
-    <div class="stars-container"></div>
-    <div class="mosque-bg"></div>
+<div id="app-container">
+    <div class="moon">🌙</div>
+    <div id="stars-container"></div>
 
-    <audio id="bg-music" loop>
-        <source src="https://cdn.pixabay.com/audio/2022/04/27/audio_67b36f7596.mp3" type="audio/mpeg">
-    </audio>
-
-    <div class="container">
-        
-        <div id="generator-view" class="panel hidden">
-            <h1>✨ Eid Card Creator ✨</h1>
-            <p style="color: var(--light-gold); margin-bottom: 2rem; font-size: 0.9rem;">Send a magical greeting + interactive Eid Salami surprise! 🎁</p>
-            
-            <div class="input-group">
-                <label>Friend's Name *</label>
-                <input type="text" id="friend-name" placeholder="e.g., Sara">
-            </div>
-            <div class="input-group">
-                <label>Your Name (Optional)</label>
-                <input type="text" id="sender-name" placeholder="e.g., Arif">
-            </div>
-            <div class="input-group">
-                <label>Custom Message (Optional)</label>
-                <textarea id="custom-msg" rows="2" placeholder="Wishing you a joyous Eid..."></textarea>
-            </div>
-
-            <button class="btn" onclick="generateLink()">Create Eid Card</button>
-
-            <div id="share-section" class="hidden" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
-                <p style="color: var(--light-gold); font-size: 0.9rem;">Your magical link is ready! ✨</p>
-                <div class="link-box" id="generated-link"></div>
-                <button class="btn" onclick="copyLink()">Copy Link</button>
-                <button class="btn btn-outline" style="margin-top: 10px;" onclick="shareNative()">Share via App</button>
-            </div>
-
-            <p style="font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 2rem;" id="social-counter"></p>
-        </div>
-
-        <div id="scene-1" class="panel hidden" style="background: transparent; border: none; box-shadow: none;">
-            <div class="lanterns">
-                <div class="lantern" onclick="createSparks(event)">🏮</div>
-                <div class="lantern" onclick="createSparks(event)">🏮</div>
-            </div>
-            <div class="moon" onclick="createSparks(event)">🌙</div>
-            <h2 id="intro-title" style="font-size: 2.2rem; margin: 1.5rem 0;">Eid Mubarak!</h2>
-            <button class="btn" onclick="goToScene(2)">Open Your Eid Surprise ✨</button>
-        </div>
-
-        <div id="scene-2" class="panel hidden">
-            <h2>You Have Mail!</h2>
-            <p style="color: var(--light-gold); font-size: 0.9rem;">Tap the envelope to open it</p>
-            
-            <div class="envelope-wrapper" id="envelope" onclick="openEnvelope()">
-                <div class="env-back"></div>
-                <div class="env-card">
-                    <div class="typed-text"><span id="typed-msg"></span><span class="cursor"></span></div>
-                    <p style="font-size: 0.8rem; font-weight: bold; margin-top: 10px; color: var(--soft-green);">From: <span id="display-sender"></span></p>
-                </div>
-                <div class="env-front"></div>
-                <div class="env-flap"></div>
-            </div>
-
-            <button id="btn-to-salami" class="btn hidden" onclick="goToScene(3)">Wait, there's more... 🎁</button>
-        </div>
-
-        <div id="scene-3" class="panel hidden">
-            <h2>A Surprise For You!</h2>
-            <p style="color: var(--light-gold); font-size: 0.9rem;">You also received a small Eid Salami!</p>
-            
-            <div class="gift-box" onclick="openSalami(event)" id="gift-box">🎁</div>
-            
-            <div id="salami-result" class="hidden">
-                <div class="salami-amount" id="salami-amount">0৳</div>
-                <p id="salami-funny-msg" style="font-size: 1.1rem; margin-bottom: 2rem;"></p>
-                <button class="btn" onclick="goToScene(4)">Continue</button>
-            </div>
-        </div>
-
-        <div id="scene-4" class="panel hidden">
-            <h2 style="font-size: 1.8rem;">Eid Mubarak! 🌙</h2>
-            <p style="margin: 1rem 0; color: var(--light-gold);">Hope this little card brought a smile to your face. Wishing you happiness, laughter, and lots of real Salami!</p>
-            
-            <div class="reaction-btns">
-                <button onclick="alert('I accept bKash and bank transfers! 😂')">Send me real Eidi 😆</button>
-                <button onclick="createSparks(event)">This card is awesome ❤️</button>
-            </div>
-            
-            <button class="btn btn-outline" style="margin-top: 2rem;" onclick="window.location.href = window.location.pathname">I want to make one too</button>
-        </div>
-
+    <div id="scene-1" class="scene active-scene" style="opacity: 1;">
+        <h1 id="greeting-text" style="opacity: 0;">Eid Mubarak,</h1>
+        <h2 id="name-text" style="opacity: 0; transform: scale(0);">Miskatul Mahia! ✨</h2>
+        <button class="btn" id="btn-next-1" style="opacity: 0;">Let the Magic Begin 💫</button>
     </div>
 
-    <script>
-        // --- State Variables ---
-        let friendName = "";
-        let senderName = "";
-        let customMsg = "";
-        let generatedUrl = "";
-        const salamiAmounts = [1, 5, 10, 50, 100, 500];
-        const funnyMessages = [
-            "If this was real money, you would already be rich 😆",
-            "Don't spend it all in one place! 🛒",
-            "This Eidi comes with unlimited friendship ❤️",
-            "You owe me real Eidi now! 👀",
-            "Time to buy imaginary biryani! 🍗"
-        ];
+    <div id="scene-2" class="scene">
+        <div class="characters-container">
+            <div class="chibi" id="char1">🧑🏽‍🦱
+                <div class="chat-bubble" id="bubble1">...</div>
+            </div>
+            <div class="chibi" id="char2">🧕🏽
+                <div class="chat-bubble" id="bubble2">...</div>
+            </div>
+        </div>
+        <button class="btn" id="btn-next-2" style="opacity: 0; margin-top: 130px;">Wait, I have a gift! 🎁</button>
+    </div>
 
-        // --- Initialization ---
-        window.onload = () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('name')) {
-                friendName = urlParams.get('name');
-                senderName = urlParams.get('from') || 'Someone Special';
-                customMsg = urlParams.get('msg') || "Instead of sending a normal text, someone built this little Eid card just for you.";
-                
-                document.getElementById('intro-title').innerHTML = `Eid Mubarak,<br>${friendName} 🌙`;
-                document.getElementById('display-sender').innerText = senderName;
-                
-                document.getElementById('scene-1').classList.remove('hidden');
-            } else {
-                document.getElementById('generator-view').classList.remove('hidden');
-                document.getElementById('social-counter').innerText = `✨ ${Math.floor(Math.random() * 800) + 2000} Eid cards created today`;
-            }
-        };
+    <div id="scene-3" class="scene">
+        <h1 id="box-title">Your Salami Box!</h1>
+        <p id="box-subtitle">Tap to open your gift 💸</p>
+        
+        <div class="scene-3d" id="box-container">
+            <div class="cube" id="gift-box">
+                <div class="face front">🎀</div>
+                <div class="face back">💸</div>
+                <div class="face right">✨</div>
+                <div class="face left">🌙</div>
+                <div class="face top">🎁</div>
+                <div class="face bottom"></div>
+            </div>
+        </div>
+        
+        <div class="salami-reveal" id="salami-amount">10৳</div>
+        
+        <p id="salami-reaction" style="opacity: 0; color: var(--gold); font-size: 22px; margin-top: 80px;">Wait... only 10 Taka?! 🤨</p>
+        <button class="btn" id="btn-next-3" style="opacity: 0;">Why so little?! 😠</button>
+    </div>
 
-        // --- Generator Functions ---
-        function generateLink() {
-            const name = document.getElementById('friend-name').value.trim();
-            const sender = document.getElementById('sender-name').value.trim();
-            const msg = document.getElementById('custom-msg').value.trim();
+    <div id="scene-4" class="scene">
+        <h1 style="font-size: 40px;">🎤🎶</h1>
+        <h2>You forgot to sing a song for me!</h2>
+        <p style="color: var(--gold);">Sing a song for me, then you get 100৳! 😆💸</p>
+        <p style="font-size: 16px;">(And don't think you can escape!)</p>
+        <button class="btn" id="btn-next-4" style="opacity: 0;">Okay fine, read my Eid card 💌</button>
+    </div>
 
-            if (!name) { alert("Please enter your friend's name!"); return; }
+    <div id="scene-5" class="scene">
+        <h1>To My Amazing Friend 💖</h1>
+        <p id="heartfelt-text" style="color: var(--light-pink); height: 140px; margin-bottom: 0;"></p>
+        
+        <p id="final-threat">P.S. Call diye eid mubarak na koile thabor dimu ekta, phone e taka nai amar 😒</p>
+        
+        <button class="btn" id="btn-replay" onclick="location.reload()" style="opacity: 0; margin-top: 20px;">Replay the Fun 🔄</button>
+    </div>
+</div>
 
-            const params = new URLSearchParams();
-            params.append('name', name);
-            if (sender) params.append('from', sender);
-            if (msg) params.append('msg', msg);
+<script>
+    gsap.registerPlugin(TextPlugin);
 
-            generatedUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
-            document.getElementById('generated-link').innerText = generatedUrl;
-            document.getElementById('share-section').classList.remove('hidden');
-        }
+    // Stars
+    const starsContainer = document.getElementById('stars-container');
+    for(let i=0; i<40; i++) {
+        let star = document.createElement('div');
+        star.classList.add('star');
+        star.style.width = Math.random() * 5 + 'px';
+        star.style.height = star.style.width;
+        star.style.top = Math.random() * 100 + '%';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 3 + 's';
+        starsContainer.appendChild(star);
+    }
 
-        function copyLink() {
-            navigator.clipboard.writeText(generatedUrl).then(() => alert("Link copied! Paste it in WhatsApp or Messenger."));
-        }
+    function switchScene(from, to) {
+        gsap.to(`#scene-${from}`, {opacity: 0, duration: 0.5, onComplete: () => {
+            document.getElementById(`scene-${from}`).classList.remove('active-scene');
+            document.getElementById(`scene-${to}`).classList.add('active-scene');
+            gsap.to(`#scene-${to}`, {opacity: 1, duration: 0.5});
+        }});
+    }
 
-        function shareNative() {
-            if (navigator.share) {
-                navigator.share({ title: 'A Special Eid Card', text: 'Open your Eid surprise! 🎁 ', url: generatedUrl }).catch(console.error);
-            } else { alert("Sharing not supported here. Just copy the link!"); }
-        }
+    // Scene 1 Start
+    window.onload = () => {
+        let tl1 = gsap.timeline();
+        tl1.to("#greeting-text", {opacity: 1, y: 10, duration: 1, ease: "power2.out"})
+           .to("#name-text", {opacity: 1, scale: 1, duration: 1, ease: "elastic.out(1, 0.4)"}, "-=0.3")
+           .to("#btn-next-1", {opacity: 1, y: -20, duration: 0.8}, "+=0.5");
+    };
 
-        // --- Navigation ---
-        function goToScene(sceneNum) {
-            document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
-            document.getElementById(`scene-${sceneNum}`).classList.remove('hidden');
-            
-            if (sceneNum === 2) {
-                // Try to play music on first interaction
-                document.getElementById('bg-music').volume = 0.3;
-                document.getElementById('bg-music').play().catch(e => console.log("Audio autoplay prevented"));
-            }
-        }
+    // Scene 1 -> 2 (The FUNNY Banter Chat)
+    document.getElementById('btn-next-1').addEventListener('click', () => {
+        switchScene(1, 2);
+        
+        let tl2 = gsap.timeline();
+        tl2.from("#char1", {x: -200, rotation: -20, opacity: 0, duration: 1, ease: "back.out(1.5)"})
+           .from("#char2", {x: 200, rotation: 20, opacity: 0, duration: 1, ease: "back.out(1.5)"}, "-=0.8")
+           
+           .to("#bubble1", {opacity: 1, y: -10, duration: 0.3})
+           .to("#bubble1", {text: "Oye Chotu! Where is my Eid call?! 😤📞", duration: 2})
+           .to("#bubble2", {opacity: 1, y: -10, duration: 0.3}, "+=0.5")
+           .to("#bubble2", {text: "Hehe... I was busy eating biryani! 🍗😋", duration: 2})
+           .to("#bubble1", {text: "Biryani without me?! Betrayal! 😭", duration: 2}, "+=0.5")
+           // CHANGED TO YOUR INSIDE JOKE NICKNAME HERE
+           .to("#bubble2", {text: "Okay okay, Eid Mubarak Queen! 🙄💖", duration: 2.5}, "+=0.5")
+           .to("#bubble1", {text: "Doesn't count! Call me NOW! 📞😠", duration: 2.5}, "+=0.5")
+           .to("#btn-next-2", {opacity: 1, duration: 0.5});
+    });
 
-        // --- Scene 2: Envelope & Typing ---
-        let envelopeOpened = false;
-        function openEnvelope() {
-            if (envelopeOpened) return;
-            envelopeOpened = true;
-            document.getElementById('envelope').classList.add('open');
-            
-            setTimeout(() => {
-                typeMessage(`Eid Mubarak ${friendName}!\n\n${customMsg}`);
-            }, 800);
-        }
+    // Scene 2 -> 3 (3D Box & Salami)
+    document.getElementById('btn-next-2').addEventListener('click', () => {
+        switchScene(2, 3);
+        gsap.fromTo("#box-container", {scale: 0}, {scale: 1, duration: 1.5, ease: "elastic.out(1, 0.5)"});
+    });
 
-        function typeMessage(text) {
-            const target = document.getElementById('typed-msg');
-            let i = 0;
-            function typeWriter() {
-                if (i < text.length) {
-                    target.innerHTML += text.charAt(i) === '\n' ? '<br>' : text.charAt(i);
-                    i++;
-                    setTimeout(typeWriter, 40);
-                } else {
-                    document.getElementById('btn-to-salami').classList.remove('hidden');
-                }
-            }
-            typeWriter();
-        }
+    // Interactive 3D Box Open
+    document.getElementById('gift-box').addEventListener('click', () => {
+        let box = document.getElementById('gift-box');
+        box.style.animation = "none"; // Stop spinning
+        
+        let tlBox = gsap.timeline();
+        
+        // Shake the box, then shrink it to disappear
+        tlBox.to(box, {x: -15, rotationY: 10, duration: 0.1, yoyo: true, repeat: 5})
+             .to(box, {scale: 0, opacity: 0, duration: 0.3, ease: "power2.in"})
+             // Hide the title and subtitle to make room
+             .to(["#box-title", "#box-subtitle"], {opacity: 0, duration: 0.2}, "-=0.3")
+             // BOOM! Big 10 Taka Reveal
+             .to("#salami-amount", {opacity: 1, scale: 1, duration: 0.8, ease: "elastic.out(1, 0.3)"})
+             // Show reaction and button
+             .to("#salami-reaction", {opacity: 1, y: -20, duration: 0.5}, "+=0.5")
+             .to("#btn-next-3", {opacity: 1, duration: 0.5});
+    });
 
-        // --- Scene 3: Salami Logic ---
-        function openSalami(e) {
-            const box = document.getElementById('gift-box');
-            box.style.display = 'none';
-            
-            // Randomize Salami
-            const amount = salamiAmounts[Math.floor(Math.random() * salamiAmounts.length)];
-            let msg = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
-            if (msg.includes("imaginary biryani")) { msg = `You got ${amount}৳! Time to buy imaginary biryani! 🍗`; }
+    // Scene 3 -> 4 (The Singing Condition)
+    document.getElementById('btn-next-3').addEventListener('click', () => {
+        switchScene(3, 4);
+        gsap.to("#btn-next-4", {opacity: 1, duration: 1, delay: 2});
+    });
 
-            document.getElementById('salami-amount').innerText = `${amount}৳`;
-            document.getElementById('salami-funny-msg').innerText = msg;
-            document.getElementById('salami-result').classList.remove('hidden');
+    // Scene 4 -> 5 (Meaningful Friendship Message & Final Threat)
+    document.getElementById('btn-next-4').addEventListener('click', () => {
+        switchScene(4, 5);
+        
+        let tl5 = gsap.timeline();
+        
+        // Typewriter effect for the sweet message
+        tl5.to("#heartfelt-text", {
+            text: "Jokes aside, may our laughs get louder, our bond get stronger, and your Eid be as wonderful as your heart! Love you endlessly, Chotu! 🌙💖", 
+            duration: 4, 
+            ease: "none"
+        })
+        // Pop in the final threat!
+        .to("#final-threat", {opacity: 1, y: -10, duration: 0.5, ease: "back.out(1.5)"}, "+=0.5")
+        // Show the replay button
+        .to("#btn-replay", {opacity: 1, duration: 0.5}, "+=0.3");
+    });
 
-            // Trigger Particle Effects
-            createParticles(e.clientX || window.innerWidth/2, e.clientY || window.innerHeight/2, ['🪙', '💵', '✨'], 30, true);
-            createParticles(e.clientX || window.innerWidth/2, e.clientY || window.innerHeight/2, ['#f4a261', '#e9c46a', '#2a9d8f', '#ffffff'], 40, false);
-        }
-
-        // --- Interactive Particles ---
-        function createSparks(e) { createParticles(e.clientX, e.clientY, ['✨', '⭐', '💫'], 10, true); }
-
-        function createParticles(x, y, items, count, isText) {
-            for (let i = 0; i < count; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                
-                if (isText) {
-                    particle.innerText = items[Math.floor(Math.random() * items.length)];
-                    particle.style.fontSize = (Math.random() * 15 + 15) + 'px';
-                } else {
-                    particle.style.width = '10px'; particle.style.height = '10px';
-                    particle.style.backgroundColor = items[Math.floor(Math.random() * items.length)];
-                    particle.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-                }
-
-                const spreadX = (Math.random() - 0.5) * 300;
-                particle.style.left = (x + spreadX) + 'px';
-                particle.style.top = y + 'px';
-                
-                const duration = Math.random() * 2 + 1.5;
-                particle.style.animationDuration = duration + 's';
-
-                document.body.appendChild(particle);
-                setTimeout(() => particle.remove(), duration * 1000);
-            }
-        }
-    </script>
+</script>
 </body>
 </html>
