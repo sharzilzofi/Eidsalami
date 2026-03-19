@@ -2,526 +2,557 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#064e3b">
-    <title>Eid Salami Wheel!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magical Eid Card Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* --- CORE STYLES & COLORS --- */
-        body {
-            background-color: #064e3b; /* Deep rich Islamic green */
-            background-image: radial-gradient(circle at center, #047857 0%, #064e3b 100%);
-            color: #ffffff; 
+        :root {
+            --dark-blue: #0A1128;
+            --night-blue: #162447;
+            --gold: #F9A03F;
+            --soft-gold: #F7D08A;
+            --white: #F8F9FA;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
             font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark-blue), var(--night-blue));
+            color: var(--white);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            min-height: 100vh;
-            margin: 0;
-            padding: 2vh 15px;
-            box-sizing: border-box;
-            overscroll-behavior-y: none; 
+            overflow-x: hidden;
+            position: relative;
         }
 
-        /* --- ANIMATED EID MUBARAK HEADER --- */
-        .animated-header {
-            text-align: center;
-            margin-bottom: 20px;
-            animation: float 3s ease-in-out infinite;
+        /* --- Starry Background --- */
+        .stars {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 90px 40px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 130px 80px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 160px 120px, #ffffff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: twinkle 4s infinite alternate;
         }
+
+        @keyframes twinkle {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* --- Global UI Elements --- */
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 500px;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h1, h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(249, 160, 63, 0.5);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .hidden { display: none !important; }
+
+        .btn {
+            background: linear-gradient(45deg, var(--gold), #e88a1a);
+            color: var(--dark-blue);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(249, 160, 63, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(249, 160, 63, 0.6);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--gold);
+            border: 2px solid var(--gold);
+            box-shadow: none;
+        }
+
+        /* --- Generator View --- */
+        .card-box {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--soft-gold);
+        }
+
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(249, 160, 63, 0.3);
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+        }
+
+        .input-group input:focus, .input-group textarea:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 8px rgba(249, 160, 63, 0.3);
+        }
+
+        #share-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .link-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 8px;
+            word-break: break-all;
+            font-size: 0.8rem;
+            color: var(--soft-gold);
+            margin-bottom: 1rem;
+        }
+
+        .counter {
+            text-align: center;
+            font-size: 0.85rem;
+            margin-top: 1.5rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* --- Card View: Intro --- */
+        #card-intro {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 80vh;
+        }
+
+        .moon {
+            font-size: 5rem;
+            text-shadow: 0 0 30px var(--soft-gold);
+            margin-bottom: 1rem;
+            animation: float 4s ease-in-out infinite;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .lantern-container {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .lantern {
+            font-size: 3rem;
+            transform-origin: top center;
+            animation: swing 3s ease-in-out infinite alternate;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .lantern:nth-child(2) { animation-delay: 0.5s; animation-duration: 3.5s; }
 
         @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+            50% { transform: translateY(-15px); }
         }
 
-        h1 {
-            font-size: clamp(2.2rem, 8vw, 3rem);
-            margin: 0;
-            font-weight: 900;
-            text-transform: uppercase;
-            color: #34d399; /* Vibrant Cyan/Green */
-            text-shadow: 0 0 10px rgba(52, 211, 153, 0.5), 2px 4px 5px rgba(0,0,0,0.6);
-            letter-spacing: 2px;
+        @keyframes swing {
+            0% { transform: rotate(-10deg); }
+            100% { transform: rotate(10deg); }
         }
 
-        .subtitle {
-            font-size: 1.1rem;
-            color: #fbbf24; /* Bright Gold */
-            font-weight: 700;
-            margin: 0;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+        /* --- Card View: Inside --- */
+        #card-inside {
+            animation: fadeSlideUp 1s ease forwards;
         }
 
-        /* --- 1. THE WHEEL SECTION (Always Top) --- */
-        .wheel-container {
+        @keyframes fadeSlideUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .envelope {
+            background: linear-gradient(135deg, #ffffff, #f0f0f0);
+            border-radius: 15px;
+            padding: 2.5rem 1.5rem;
+            color: var(--dark-blue);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
             position: relative;
-            width: 100%;
-            max-width: 340px; 
-            aspect-ratio: 1 / 1; 
-            margin: 0 auto 20px auto;
         }
 
-        canvas {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8), 0 0 20px rgba(251, 191, 36, 0.3);
-            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
-            transform: rotate(0deg);
-            background: #fff;
+        .envelope h2 {
+            color: var(--dark-blue);
+            text-shadow: none;
         }
 
-        .pointer {
-            position: absolute;
-            top: 50%;
-            right: -5%;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-top: 15px solid transparent;
-            border-bottom: 15px solid transparent;
-            border-right: 30px solid #ef4444; /* Bright Red */
-            z-index: 10;
-            filter: drop-shadow(-3px 3px 3px rgba(0,0,0,0.8));
+        .message-body {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin: 1.5rem 0;
+            min-height: 80px;
         }
 
-        /* --- 2. THE UI/FORM SECTION (Always Bottom) --- */
-        .ui-section {
-            width: 100%;
-            max-width: 360px;
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.1em;
+            background-color: var(--dark-blue);
+            vertical-align: middle;
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .interactive-row {
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2rem 0;
         }
 
-        /* Spin Button */
-        .btn-spin {
-            padding: 16px 30px;
-            font-size: 1.4rem;
-            font-weight: 900;
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            color: #064e3b;
-            border: none;
-            border-radius: 50px;
+        .interact-item {
+            font-size: 2.5rem;
             cursor: pointer;
-            box-shadow: 0 6px 15px rgba(251, 191, 36, 0.4);
-            width: 90%;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: transform 0.1s;
+            transition: transform 0.2s;
         }
 
-        .btn-spin:active { transform: scale(0.95); }
+        .interact-item:hover { transform: scale(1.2); }
 
-        /* The Claim Form (Hidden initially) */
-        #claimSection {
-            display: none; 
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 20px 15px;
+        .fun-ending {
+            margin-top: 2rem;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            padding-top: 1.5rem;
+        }
+
+        .reaction-btns {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+
+        .reaction-btns button {
+            background: rgba(10, 17, 40, 0.1);
+            border: none;
+            padding: 8px 15px;
             border-radius: 20px;
-            border: 2px dashed #34d399;
-            box-sizing: border-box;
-            animation: slideUp 0.4s ease-out;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        #claimAmountText {
-            margin: 0 0 15px 0;
-            font-size: 1.6rem;
-            color: #fbbf24;
-            font-weight: 900;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-            text-align: center;
-        }
-
-        #claimSection input {
-            padding: 14px;
-            font-size: 1.2rem;
-            font-family: 'Poppins', sans-serif;
-            border-radius: 12px;
-            border: none;
-            width: 100%;
-            margin-bottom: 12px;
-            text-align: center;
-            outline: none;
-            box-sizing: border-box;
-            background: #ffffff;
-            color: #111;
-            font-weight: 700;
-            letter-spacing: 2px;
-        }
-
-        .btn-claim {
-            padding: 14px;
-            font-size: 1.1rem;
-            font-weight: 800;
-            font-family: 'Poppins', sans-serif;
-            background: #ef4444;
-            color: #fff;
-            border: none;
-            border-radius: 12px;
             cursor: pointer;
-            width: 100%;
-            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.5);
+            transition: 0.2s;
         }
 
-        .btn-claim:active { transform: scale(0.98); }
-        #loadingMessage { margin-top: 10px; font-size: 1rem; color: #34d399; font-weight: 700; }
+        .reaction-btns button:hover { background: rgba(10, 17, 40, 0.2); }
 
-        /* --- 3. LIVE SALAMI COUNTER --- */
-        .live-counter-box {
-            margin-top: 25px;
-            width: 100%;
-            max-width: 360px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-            padding: 10px;
-            text-align: center;
-            box-sizing: border-box;
-            overflow: hidden;
-            position: relative;
+        .card-actions { margin-top: 2rem; }
+
+        /* --- Particles --- */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+            animation: fall linear forwards;
         }
 
-        .total-salami {
-            font-size: 0.9rem;
-            color: #fbbf24;
-            font-weight: 700;
-            margin-bottom: 5px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            padding-bottom: 5px;
+        @keyframes fall {
+            0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
         }
-
-        .ticker-wrap {
-            height: 20px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .ticker-text {
-            font-size: 0.85rem;
-            color: #34d399;
-            font-weight: 700;
-            position: absolute;
-            width: 100%;
-            animation: tickUp 3s infinite;
-        }
-
-        @keyframes tickUp {
-            0%, 20% { transform: translateY(20px); opacity: 0; }
-            30%, 80% { transform: translateY(0); opacity: 1; }
-            90%, 100% { transform: translateY(-20px); opacity: 0; }
-        }
-
-        /* --- 4. THE FULL PANDA MODAL --- */
-        #overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 99; }
-        #popupModal { 
-            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.1); 
-            background: linear-gradient(135deg, #064e3b, #047857); border: 3px solid #fbbf24; color: #fff; 
-            padding: 25px 15px; border-radius: 20px; z-index: 100; text-align: center; 
-            width: 90%; max-width: 380px; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        }
-        #popupModal.show { transform: translate(-50%, -50%) scale(1); }
-        
-        /* The CSS SVG Full Panda Arena */
-        .panda-arena { display: flex; justify-content: center; align-items: flex-end; height: 120px; margin: 15px 0; position: relative; }
-        
-        .speech-bubble { 
-            position: absolute; top: -10px; left: 5%; background: white; color: black; font-size: 0.75rem; 
-            font-weight: 800; padding: 5px 8px; border-radius: 8px; animation: hideBubble 3s infinite; 
-        }
-        .speech-bubble::after { content: ''; position: absolute; bottom: -4px; right: 10px; border-width: 5px 5px 0; border-style: solid; border-color: white transparent transparent transparent; }
-        
-        /* Full Body Panda positioning */
-        .panda-full { width: 80px; height: 80px; }
-        .panda-beggar { position: absolute; left: 10%; bottom: 0; animation: beggarReact 3s infinite; transform-origin: bottom center; }
-        .panda-boss { position: absolute; right: 10%; bottom: 0; animation: bossAttack 3s infinite; transform-origin: bottom center; z-index: 2; }
-        .hit-effect { position: absolute; left: 35%; top: 30%; font-size: 2.5rem; opacity: 0; animation: hitFlash 3s infinite; z-index: 3; }
-
-        /* The Slap & Kick Animations */
-        @keyframes bossAttack { 
-            0%, 10% { transform: translateX(0) rotate(0); } 
-            15% { transform: translateX(-30px) rotate(-15deg); } /* Slap */
-            25% { transform: translateX(0) rotate(0); } 
-            40% { transform: translateX(0) rotate(0); } 
-            45% { transform: translateX(-40px) translateY(-10px) rotate(-30deg); } /* Kick */
-            60% { transform: translateX(0) translateY(0) rotate(0); } 
-            100% { transform: translateX(0) rotate(0); } 
-        }
-        @keyframes beggarReact { 
-            0%, 12% { transform: translateX(0) rotate(0); } 
-            15% { transform: translateX(-15px) rotate(-10deg); } /* Slapped */
-            25% { transform: translateX(0) rotate(0); } 
-            45% { transform: translateX(-100px) rotate(-90deg) scale(0.5); opacity: 0;} /* Kicked off screen */
-            90% { transform: translateX(0) rotate(0) scale(1); opacity: 1;} 
-            100% { transform: translateX(0) rotate(0); } 
-        }
-        @keyframes hitFlash { 0%, 12% { opacity: 0; } 15% { opacity: 1; } 20% { opacity: 0; } 42% { opacity: 0; } 45% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 0; } }
-        @keyframes hideBubble { 0%, 40% { opacity: 1; } 45%, 100% { opacity: 0; } }
-
-        .joke-text { font-size: 1.05rem; font-weight: 700; margin: 20px 0; line-height: 1.4; color: #34d399; }
-        .btn-close-modal { background: #fbbf24; color: #064e3b; width: 100%; border: none; font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 900; border-radius: 12px; padding: 14px; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
-    <div class="animated-header">
-        <h1>✨ Eid Mubarak ✨</h1>
-        <p class="subtitle">Spin for your Salami!</p>
-    </div>
+    <div class="stars"></div>
 
-    <div class="wheel-container">
-        <div class="pointer"></div>
-        <canvas id="wheelCanvas" width="600" height="600"></canvas>
-    </div>
+    <audio id="bg-music" loop>
+        <source src="https://cdn.pixabay.com/audio/2022/04/27/audio_67b36f7596.mp3" type="audio/mpeg">
+    </audio>
 
-    <div class="ui-section">
-        <button id="spinBtn" class="btn-spin" onclick="spin()">SPIN NOW!</button>
+    <div class="container">
         
-        <div id="claimSection">
-            <div id="claimAmountText"></div>
-            <input type="tel" id="bkashNumber" placeholder="bKash Number" maxlength="11" inputmode="numeric">
-            <button id="claimBtn" class="btn-claim" onclick="claimSalami()">Claim Securely</button>
-            <div id="loadingMessage"></div>
-        </div>
-    </div>
-
-    <div class="live-counter-box">
-        <div class="total-salami">💰 Total Salami Claimed: <span id="totalMoney">৳ 45,210</span></div>
-        <div class="ticker-wrap">
-            <div class="ticker-text" id="liveTicker">017-****-892 just won 5৳!</div>
-        </div>
-    </div>
-
-    <div id="overlay"></div>
-    <div id="popupModal">
-        <h2 style="color: #fbbf24; margin-top: 0;">Claim Status</h2>
-        
-        <div class="panda-arena">
-            <div class="speech-bubble">Plz Salami!</div>
+        <div id="generator-view" class="card-box hidden">
+            <h1>✨ Eid Card Creator ✨</h1>
+            <p style="margin-bottom: 2rem; color: var(--soft-gold);">Create a magical, personalized Eid greeting in seconds.</p>
             
-            <svg class="panda-full panda-beggar" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="20" cy="55" r="10" fill="#222" /><circle cx="80" cy="55" r="10" fill="#222" />
-                <circle cx="35" cy="85" r="12" fill="#222" /><circle cx="65" cy="85" r="12" fill="#222" />
-                <ellipse cx="50" cy="65" rx="32" ry="26" fill="#fff" stroke="#222" stroke-width="2"/>
-                <circle cx="30" cy="20" r="12" fill="#222" /><circle cx="70" cy="20" r="12" fill="#222" />
-                <circle cx="50" cy="35" r="26" fill="#fff" stroke="#222" stroke-width="2"/>
-                <ellipse cx="38" cy="32" rx="6" ry="9" fill="#222" transform="rotate(-15 38 32)"/>
-                <ellipse cx="62" cy="32" rx="6" ry="9" fill="#222" transform="rotate(15 62 32)"/>
-                <circle cx="38" cy="30" r="2" fill="#fff" /><circle cx="62" cy="30" r="2" fill="#fff" />
-                <ellipse cx="50" cy="42" rx="4" ry="3" fill="#222" />
-                <path d="M 45 47 Q 50 52 55 47" fill="none" stroke="#222" stroke-width="2" />
-            </svg>
+            <div class="input-group">
+                <label for="friend-name">Friend's Name *</label>
+                <input type="text" id="friend-name" placeholder="e.g., Sara">
+            </div>
+            
+            <div class="input-group">
+                <label for="sender-name">Your Name (Optional)</label>
+                <input type="text" id="sender-name" placeholder="e.g., Arif">
+            </div>
 
-            <div class="hit-effect">💥</div>
+            <div class="input-group">
+                <label for="custom-msg">Short Message (Optional)</label>
+                <textarea id="custom-msg" rows="3" placeholder="Wishing you a joyous Eid filled with love..."></textarea>
+            </div>
 
-            <svg class="panda-full panda-boss" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="20" cy="55" r="10" fill="#222" /><circle cx="80" cy="55" r="10" fill="#222" />
-                <circle cx="35" cy="85" r="12" fill="#222" /><circle cx="65" cy="85" r="12" fill="#222" />
-                <ellipse cx="50" cy="65" rx="32" ry="26" fill="#fff" stroke="#222" stroke-width="2"/>
-                <circle cx="30" cy="20" r="12" fill="#222" /><circle cx="70" cy="20" r="12" fill="#222" />
-                <circle cx="50" cy="35" r="26" fill="#fff" stroke="#222" stroke-width="2"/>
-                <ellipse cx="38" cy="32" rx="6" ry="9" fill="#222" transform="rotate(15 38 32)"/> <ellipse cx="62" cy="32" rx="6" ry="9" fill="#222" transform="rotate(-15 62 32)"/> <circle cx="38" cy="33" r="2" fill="#fff" /><circle cx="62" cy="33" r="2" fill="#fff" />
-                <ellipse cx="50" cy="42" rx="4" ry="3" fill="#222" />
-                <path d="M 45 49 Q 50 46 55 49" fill="none" stroke="#222" stroke-width="2" /> </svg>
+            <button class="btn" onclick="generateLink()">Generate Eid Card</button>
+
+            <div id="share-section" class="hidden">
+                <p style="color: var(--soft-gold); margin-bottom: 10px;">Your magical link is ready! ✨</p>
+                <div class="link-box" id="generated-link"></div>
+                <button class="btn" onclick="copyLink()">Copy Link</button>
+                <button class="btn btn-outline" style="margin-top: 10px;" onclick="shareNative()">Share via App</button>
+            </div>
+
+            <div class="counter">
+                <span id="card-counter">✨ 1,234</span> Eid cards created today
+            </div>
         </div>
 
-        <div id="jokeText" class="joke-text"></div>
-        <button class="btn-close-modal" onclick="closePopup()">Okay, fine 😭</button>
+        <div id="card-view" class="hidden">
+            
+            <div id="card-intro">
+                <div class="lantern-container">
+                    <div class="lantern" onclick="createStars(event)">🏮</div>
+                    <div class="lantern" onclick="createStars(event)">🏮</div>
+                </div>
+                <div class="moon" onclick="createStars(event)">🌙</div>
+                <h2 style="font-size: 2rem; margin: 1rem 0;">Eid Mubarak,<br><span id="display-friend-intro">Friend</span>!</h2>
+                <button class="btn" onclick="openCard()">Open Your Eid Card ✨</button>
+            </div>
+
+            <div id="card-inside" class="hidden">
+                <div class="envelope">
+                    <h2>Eid Mubarak!</h2>
+                    
+                    <div class="message-body">
+                        <span id="typed-text"></span><span class="cursor"></span>
+                    </div>
+
+                    <p style="font-weight: 600; color: var(--gold); margin-top: 1rem;">
+                        From: <span id="display-sender">Someone special</span>
+                    </p>
+
+                    <div class="interactive-row">
+                        <div class="interact-item" onclick="triggerConfetti(event)" title="Click for a surprise!">🎁</div>
+                        <div class="interact-item" onclick="createStars(event)" title="Make it rain stars!">✨</div>
+                    </div>
+
+                    <div class="fun-ending">
+                        <p style="font-size: 0.9rem; font-weight: 600;">Did this Eid card make you smile?</p>
+                        <div class="reaction-btns">
+                            <button onclick="showReaction('Yay! Eid Mubarak! 🌙')">Yes 😊</button>
+                            <button onclick="showReaction('Well, I tried! Have some biryani! 🍛')">Maybe 🤔</button>
+                            <button onclick="showReaction('Send your bKash/Bank details first! 💸😂')">Send Eidi 😂</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn btn-outline" onclick="goToGenerator()" style="color: white; border-color: white;">Create Your Own Card</button>
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <script>
-        // --- LIVE TICKER LOGIC ---
-        const fakePrefixes = ["017", "018", "019", "016", "013", "015"];
-        const fakeAmounts = ["1৳", "2৳", "5৳", "10৳", "3৳", "6৳"];
-        let totalSalamiCount = 45210;
+        // Data variables
+        let friendName = "";
+        let senderName = "";
+        let customMsg = "";
+        let generatedUrl = "";
 
-        function updateTicker() {
-            const prefix = fakePrefixes[Math.floor(Math.random() * fakePrefixes.length)];
-            const lastDigits = Math.floor(Math.random() * 900) + 100;
-            const amt = fakeAmounts[Math.floor(Math.random() * fakeAmounts.length)];
-            
-            document.getElementById('liveTicker').innerText = `${prefix}-****-${lastDigits} claimed ${amt}!`;
-            
-            // Add a little fake money to the total
-            totalSalamiCount += parseInt(amt.replace('৳', ''));
-            document.getElementById('totalMoney').innerText = `৳ ${totalSalamiCount.toLocaleString()}`;
-        }
-        setInterval(updateTicker, 3000); // Changes every 3 seconds
-
-        // --- WHEEL LOGIC ---
-        const canvas = document.getElementById("wheelCanvas");
-        const ctx = canvas.getContext("2d");
-        const spinBtn = document.getElementById("spinBtn");
-        const claimSection = document.getElementById("claimSection");
-        const claimAmountText = document.getElementById("claimAmountText");
-        const bkashInput = document.getElementById("bkashNumber");
-        const claimBtn = document.getElementById("claimBtn");
-        const loadingMessage = document.getElementById("loadingMessage");
-        const overlay = document.getElementById("overlay");
-        const popupModal = document.getElementById("popupModal");
-        const jokeText = document.getElementById("jokeText");
-
-        let currentWonAmount = "";
-
-        // Notice the modern colors on the wheel to match the new dark theme
-        const segments = [
-            { label: '1৳',   weight: 9.9998, color: '#34d399' },
-            { label: '2৳',   weight: 9.9998, color: '#10b981' },
-            { label: '3৳',   weight: 9.9998, color: '#059669' },
-            { label: '4৳',   weight: 9.9998, color: '#047857' },
-            { label: '5৳',   weight: 9.9998, color: '#065f46' },
-            { label: '6৳',   weight: 9.9998, color: '#34d399' },
-            { label: '7৳',   weight: 9.9998, color: '#10b981' },
-            { label: '8৳',   weight: 9.9998, color: '#059669' },
-            { label: '9৳',   weight: 9.9998, color: '#047857' },
-            { label: '10৳',  weight: 9.9998, color: '#065f46' },
-            { label: '100৳', weight: 0.001,  color: '#fbbf24' }, // Gold
-            { label: '500৳', weight: 0.001,  color: '#ef4444' }  // Red
-        ];
-
-        const numSegments = segments.length;
-        const arc = Math.PI * 2 / numSegments;
-        let currentRotation = 0;
-
-        function drawWheel() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < numSegments; i++) {
-                const angle = i * arc;
-                ctx.beginPath();
-                ctx.fillStyle = segments[i].color;
-                ctx.moveTo(canvas.width / 2, canvas.height / 2);
-                ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2, angle, angle + arc);
-                ctx.fill();
-                ctx.strokeStyle = "#fff";
-                ctx.lineWidth = 4; 
-                ctx.stroke();
-
-                ctx.save();
-                ctx.translate(canvas.width / 2, canvas.height / 2);
-                ctx.rotate(angle + arc / 2);
-                ctx.textAlign = "right";
-                ctx.fillStyle = "#fff";
-                ctx.font = "bold 35px 'Poppins', sans-serif"; 
+        // Parse URL Parameters
+        window.onload = () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('name')) {
+                friendName = urlParams.get('name');
+                senderName = urlParams.get('from') || 'Someone Special';
+                customMsg = urlParams.get('msg') || "Someone made this magical Eid card just for you. Wishing you a day filled with joy, peace, and delicious food!";
                 
-                if(segments[i].label === '100৳' || segments[i].label === '500৳') {
-                    ctx.fillStyle = "#000";
-                    ctx.font = "900 45px 'Poppins', sans-serif";
-                }
+                document.getElementById('display-friend-intro').innerText = friendName;
+                document.getElementById('display-sender').innerText = senderName;
                 
-                ctx.fillText(segments[i].label, canvas.width / 2 - 25, 12);
-                ctx.restore();
+                document.getElementById('card-view').classList.remove('hidden');
+                document.getElementById('generator-view').classList.add('hidden');
+            } else {
+                document.getElementById('generator-view').classList.remove('hidden');
+                // Fake dynamic counter
+                document.getElementById('card-counter').innerText = `✨ ${Math.floor(Math.random() * 500) + 1200}`;
             }
-        }
+        };
 
-        function getWinningIndex() {
-            let sum = 0;
-            const randomVal = Math.random() * 100;
-            for (let i = 0; i < numSegments; i++) {
-                sum += segments[i].weight;
-                if (randomVal <= sum) return i;
-            }
-            return 0; 
-        }
+        // --- Generator Functions ---
+        function generateLink() {
+            const nameInput = document.getElementById('friend-name').value.trim();
+            const senderInput = document.getElementById('sender-name').value.trim();
+            const msgInput = document.getElementById('custom-msg').value.trim();
 
-        function spin() {
-            spinBtn.style.display = "none"; // Hide immediately
-            claimSection.style.display = "none"; 
-            loadingMessage.innerHTML = "";
-            bkashInput.style.display = "block";
-            claimBtn.style.display = "block";
-            bkashInput.value = "";
-
-            const winningIndex = getWinningIndex();
-            const sliceDegrees = 360 / numSegments;
-            const randomOffsetInsideSlice = Math.floor(Math.random() * (sliceDegrees - 8)) + 4; 
-            const targetAngle = 360 - (winningIndex * sliceDegrees) - randomOffsetInsideSlice;
-            const extraSpins = (Math.floor(Math.random() * 5) + 8) * 360; 
-            
-            currentRotation += extraSpins + targetAngle - (currentRotation % 360);
-            canvas.style.transform = `rotate(${currentRotation}deg)`;
-
-            setTimeout(() => {
-                currentWonAmount = segments[winningIndex].label;
-                claimAmountText.innerHTML = `You won ${currentWonAmount}! 🤑`;
-                claimSection.style.display = "flex";
-                
-                // Force scroll to form
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-
-            }, 4000); 
-        }
-
-        function claimSalami() {
-            const number = bkashInput.value.trim();
-            
-            if (number.length < 11) {
-                alert("Brother, enter your full 11-digit bKash number!");
+            if (!nameInput) {
+                alert("Please enter your friend's name!");
                 return;
             }
 
-            bkashInput.style.display = "none";
-            claimBtn.style.display = "none";
-            loadingMessage.innerHTML = "Connecting to Servers... 🚀";
+            const baseUrl = window.location.origin + window.location.pathname;
+            const params = new URLSearchParams();
+            params.append('name', nameInput);
+            if (senderInput) params.append('from', senderInput);
+            if (msgInput) params.append('msg', msgInput);
 
-            fetch("https://formsubmit.co/ajax/brandhatches@gmail.com", {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify({
-                    _subject: "🎉 New Salami Claim!",
-                    bKash_Number: number,
-                    Amount_Won: currentWonAmount
-                })
-            })
-            .then(response => response.json())
-            .then(data => { triggerFunnyPopup(number); })
-            .catch(error => { triggerFunnyPopup(number); });
+            generatedUrl = `${baseUrl}?${params.toString()}`;
+            
+            document.getElementById('generated-link').innerText = generatedUrl;
+            document.getElementById('share-section').classList.remove('hidden');
         }
 
-        function triggerFunnyPopup(number) {
-            setTimeout(() => {
-                claimSection.style.display = "none";
+        function copyLink() {
+            navigator.clipboard.writeText(generatedUrl).then(() => {
+                alert("Link copied to clipboard! Share it with your friend.");
+            });
+        }
 
-                let theJoke = "";
-                if (currentWonAmount === '100৳' || currentWonAmount === '500৳') {
-                    theJoke = `⚠️ Error 404: Salami Wallet Empty! ⚠️<br><br>Wait, you actually won ${currentWonAmount}?! I literally coded this to be impossible.`;
+        function shareNative() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'A Special Eid Card for You!',
+                    text: 'I made a magical Eid card for you. Open it here: ',
+                    url: generatedUrl,
+                }).catch(console.error);
+            } else {
+                alert("Native sharing is not supported on this browser. Please use the Copy Link button.");
+            }
+        }
+
+        // --- Card Animation Functions ---
+        function openCard() {
+            // Play Music
+            const audio = document.getElementById('bg-music');
+            audio.volume = 0.4;
+            audio.play().catch(e => console.log("Audio autoplay prevented"));
+
+            // Swap views
+            document.getElementById('card-intro').classList.add('hidden');
+            document.getElementById('card-inside').classList.remove('hidden');
+
+            // Start typing effect
+            typeMessage(`Eid Mubarak ${friendName}!\n\n${customMsg}`);
+        }
+
+        function typeMessage(text) {
+            const target = document.getElementById('typed-text');
+            target.innerHTML = '';
+            let i = 0;
+            const speed = 40; // typing speed in ms
+
+            function typeWriter() {
+                if (i < text.length) {
+                    if (text.charAt(i) === '\n') {
+                        target.innerHTML += '<br>';
+                    } else {
+                        target.innerHTML += text.charAt(i);
+                    }
+                    i++;
+                    setTimeout(typeWriter, speed);
+                }
+            }
+            // Add a slight delay before typing starts
+            setTimeout(typeWriter, 500);
+        }
+
+        function goToGenerator() {
+            window.location.href = window.location.origin + window.location.pathname;
+        }
+
+        function showReaction(msg) {
+            alert(msg);
+        }
+
+        // --- Interactive Particle Effects (No Libraries Needed) ---
+        function createStars(event) {
+            createParticles(event.clientX, event.clientY, ['✨', '🌟', '🌙'], 10);
+        }
+
+        function triggerConfetti(event) {
+            const colors = ['#F9A03F', '#F7D08A', '#ffffff', '#e88a1a'];
+            createParticles(event.clientX, event.clientY, colors, 30, true);
+        }
+
+        function createParticles(x, y, items, count, isColorDiv = false) {
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                if (isColorDiv) {
+                    particle.style.width = '10px';
+                    particle.style.height = '10px';
+                    particle.style.backgroundColor = items[Math.floor(Math.random() * items.length)];
+                    particle.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
                 } else {
-                    const jokes = [
-                        `Did you really think I'd just hand over ${currentWonAmount}? 😂`,
-                        `Success! I will send ${currentWonAmount} to ${number} right after I sell my kidney.`,
-                        `bKash fee is more than ${currentWonAmount}. You actually owe ME money now!`,
-                        `${currentWonAmount} is on the way! Please allow 3 to 5 business years for delivery. ⏳`
-                    ];
-                    theJoke = jokes[Math.floor(Math.random() * jokes.length)];
+                    particle.innerText = items[Math.floor(Math.random() * items.length)];
+                    particle.style.fontSize = (Math.random() * 15 + 10) + 'px';
                 }
 
-                jokeText.innerHTML = theJoke;
-                overlay.style.display = "block";
-                popupModal.style.display = "block";
+                // Random horizontal spread
+                const spreadX = (Math.random() - 0.5) * 200;
+                particle.style.left = (x + spreadX) + 'px';
+                particle.style.top = y + 'px';
                 
-                setTimeout(() => { popupModal.classList.add("show"); }, 10);
-            }, 1000); 
-        }
+                // Random fall speed
+                const duration = Math.random() * 2 + 2;
+                particle.style.animationDuration = duration + 's';
 
-        function closePopup() {
-            popupModal.classList.remove("show");
-            setTimeout(() => {
-                popupModal.style.display = "none";
-                overlay.style.display = "none";
-                spinBtn.style.display = "block"; // Bring spin button back
-            }, 400); 
-        }
+                document.body.appendChild(particle);
 
-        drawWheel();
+                // Clean up DOM after animation
+                setTimeout(() => {
+                    particle.remove();
+                }, duration * 1000);
+            }
+        }
     </script>
 </body>
 </html>
