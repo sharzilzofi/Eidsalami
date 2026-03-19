@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eid Salami Wheel!</title>
+    <style>
+        body {
+            background-color: #0f4c3a; 
+            color: #f1c40f; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(241, 196, 15, 0.5);
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+            transform: rotate(0deg);
+        }
+
+        .pointer {
+            position: absolute;
+            top: 50%;
+            right: -15px;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-right: 30px solid #e74c3c;
+            z-index: 10;
+            filter: drop-shadow(-2px 2px 2px rgba(0,0,0,0.5));
+        }
+
+        button {
+            padding: 12px 35px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background-color: #f1c40f;
+            color: #0f4c3a;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background-color: #f39c12;
+            transform: scale(1.05);
+        }
+
+        button:disabled {
+            background-color: #7f8c8d;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #result {
+            margin-top: 15px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            min-height: 30px;
+            color: #fff;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        #claimSection {
+            display: none; 
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border: 2px dashed #f1c40f;
+            animation: fadeIn 0.5s ease-in-out;
+            width: 90%;
+            max-width: 350px;
+        }
+
+        #claimSection input {
+            padding: 12px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            border: none;
+            width: 80%;
+            margin-bottom: 15px;
+            text-align: center;
+            outline: none;
+        }
+
+        #finalMessage {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            color: #fff;
+            text-align: center;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        .jackpot {
+            color: #f1c40f !important;
+            animation: pulse 0.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.2); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🌙 Eid Salami Wheel 🌙</h1>
+    <p>Spin to win your Salami!</p>
+
+    <div class="wheel-container">
+        <div class="pointer"></div>
+        <canvas id="wheelCanvas" width="500" height="500"></canvas>
+    </div>
+
+    <button id="spinBtn" onclick="spin()">SPIN THE WHEEL!</button>
+    <div id="result"></div>
+
+    <div id="claimSection">
+        <h3 style="margin-top: 0; color: #f1c40f;">Claim Your Reward!</h3>
+        <input type="tel" id="bkashNumber" placeholder="Enter bKash Number" maxlength="11">
+        <button id="claimBtn" onclick="claimSalami()">Send to bKash</button>
+        <div id="finalMessage"></div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("wheelCanvas");
+        const ctx = canvas.getContext("2d");
+        const spinBtn = document.getElementById("spinBtn");
+        const resultDiv = document.getElementById("result");
+        const claimSection = document.getElementById("claimSection");
+        const bkashInput = document.getElementById("bkashNumber");
+        const claimBtn = document.getElementById("claimBtn");
+        const finalMessage = document.getElementById("finalMessage");
+
+        let currentWonAmount = "";
+
+        // The rigged probabilities
+        const segments = [
+            { label: '1৳',   weight: 9.9998, color: '#1abc9c' },
+            { label: '2৳',   weight: 9.9998, color: '#2ecc71' },
+            { label: '3৳',   weight: 9.9998, color: '#3498db' },
+            { label: '4৳',   weight: 9.9998, color: '#9b59b6' },
+            { label: '5৳',   weight: 9.9998, color: '#34495e' },
+            { label: '6৳',   weight: 9.9998, color: '#16a085' },
+            { label: '7৳',   weight: 9.9998, color: '#27ae60' },
+            { label: '8৳',   weight: 9.9998, color: '#2980b9' },
+            { label: '9৳',   weight: 9.9998, color: '#8e44ad' },
+            { label: '10৳',  weight: 9.9998, color: '#e67e22' },
+            { label: '100৳', weight: 0.001,  color: '#f1c40f' }, 
+            { label: '500৳', weight: 0.001,  color: '#e74c3c' }  
+        ];
+
+        const numSegments = segments.length;
+        const arc = Math.PI * 2 / numSegments;
+        let currentRotation = 0;
+
+        function drawWheel() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < numSegments; i++) {
+                const angle = i * arc;
+                ctx.beginPath();
+                ctx.fillStyle = segments[i].color;
+                ctx.moveTo(canvas.width / 2, canvas.height / 2);
+                ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2, angle, angle + arc);
+                ctx.fill();
+                ctx.strokeStyle = "#ffffff";
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                ctx.save();
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.rotate(angle + arc / 2);
+                ctx.textAlign = "right";
+                ctx.fillStyle = "#fff";
+                ctx.font = "bold 25px Arial";
+                
+                if(segments[i].label === '100৳' || segments[i].label === '500৳') {
+                    ctx.fillStyle = "#000";
+                    ctx.font = "bold 30px Arial";
+                }
+                
+                ctx.fillText(segments[i].label, canvas.width / 2 - 20, 10);
+                ctx.restore();
+            }
+        }
+
+        function getWinningIndex() {
+            let sum = 0;
+            const randomVal = Math.random() * 100;
+            for (let i = 0; i < numSegments; i++) {
+                sum += segments[i].weight;
+                if (randomVal <= sum) return i;
+            }
+            return 0; 
+        }
+
+        function spin() {
+            spinBtn.disabled = true;
+            resultDiv.innerHTML = "";
+            resultDiv.className = "";
+            claimSection.style.display = "none"; 
+            finalMessage.innerHTML = "";
+            bkashInput.style.display = "block";
+            claimBtn.style.display = "block";
+            bkashInput.value = "";
+
+            const winningIndex = getWinningIndex();
+            const sliceDegrees = 360 / numSegments;
+            const randomOffsetInsideSlice = Math.floor(Math.random() * (sliceDegrees - 4)) + 2; 
+            const targetAngle = 360 - (winningIndex * sliceDegrees) - randomOffsetInsideSlice;
+            const extraSpins = (Math.floor(Math.random() * 5) + 8) * 360; 
+            
+            currentRotation += extraSpins + targetAngle - (currentRotation % 360);
+            canvas.style.transform = `rotate(${currentRotation}deg)`;
+
+            setTimeout(() => {
+                currentWonAmount = segments[winningIndex].label;
+                
+                if(currentWonAmount === '100৳' || currentWonAmount === '500৳') {
+                    resultDiv.innerHTML = `🎉 OMG! You won ${currentWonAmount}! 🎉`;
+                    resultDiv.className = "jackpot";
+                } else {
+                    resultDiv.innerHTML = `Wow! You won ${currentWonAmount}! 🤑`;
+                }
+                
+                spinBtn.disabled = false;
+                
+                setTimeout(() => {
+                    claimSection.style.display = "flex";
+                }, 500);
+
+            }, 4000); 
+        }
+
+        function claimSalami() {
+            const number = bkashInput.value.trim();
+            
+            if (number.length < 11) {
+                alert("Brother, please enter a valid 11-digit bKash number first! How else will I send this massive wealth?");
+                return;
+            }
+
+            bkashInput.style.display = "none";
+            claimBtn.style.display = "none";
+            finalMessage.innerHTML = "<i>Connecting to bKash server... please wait.</i>";
+
+            // ==========================================
+            // ⚠️ YOUR GOOGLE FORMS SETTINGS GO HERE ⚠️
+            // ==========================================
+            
+            const formUrl = "YOUR_FORMRESPONSE_URL_HERE"; 
+            
+            const formData = new FormData();
+            formData.append("entry.REPLACE_WITH_BKASH_ID", number); 
+            formData.append("entry.REPLACE_WITH_AMOUNT_ID", currentWonAmount); 
+
+            // ==========================================
+
+            fetch(formUrl, {
+                method: "POST",
+                mode: "no-cors",
+                body: formData
+            }).then(() => {
+                setTimeout(() => {
+                    if (currentWonAmount === '100৳' || currentWonAmount === '500৳') {
+                        finalMessage.innerHTML = `⚠️ <b>ERROR 404: Wallet Funds Not Found.</b><br><br>Wait, you actually hit the jackpot?! Screenshot this and send it to me, I guess I owe you ${currentWonAmount}...`;
+                    } else {
+                        const jokes = [
+                            `✅ Success! ${currentWonAmount} is scheduled to be sent to ${number}. Please allow 3 to 5 business years for the transaction to complete.`,
+                            `✅ Request received! I will send ${currentWonAmount} to ${number} right after I sell my kidney.`,
+                            `✅ Processing... Actually, bKash's cash-in fee is more than ${currentWonAmount}. You owe ME money now.`
+                        ];
+                        finalMessage.innerHTML = jokes[Math.floor(Math.random() * jokes.length)];
+                    }
+                }, 2000); 
+            }).catch(error => {
+                // Failsafe joke if the fetch errors out
+                setTimeout(() => {
+                    finalMessage.innerHTML = `✅ Request received! I will send ${currentWonAmount} to ${number} right after I sell my kidney.`;
+                }, 2000);
+            });
+        }
+
+        drawWheel();
+    </script>
+</body>
+</html>
